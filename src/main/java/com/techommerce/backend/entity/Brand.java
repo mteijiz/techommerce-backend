@@ -6,35 +6,37 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.validation.Valid;
 import javax.validation.constraints.AssertTrue;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import com.techommerce.backend.request.AddBrandRequest;
+
 @Entity
 @Table(name = "brands", schema = "ecommerce")
 public class Brand {
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long brandId;
-	
+
 	@Column(unique = true)
 	@NotNull
-	@Size(min = 1, max=10)
+	@Size(min = 1, max = 10)
 	@NotBlank
 	private String brandCode;
-	
+
 	@Column(unique = true)
 	@NotNull
-	@Size(min = 1, max=15)
+	@Size(min = 1, max = 15)
 	@NotBlank
 	private String brandName;
-	
-	@Column(unique = true)
-	@Size(max=30)
+
+	@Size(max = 30)
 	private String brandDescription;
-	
+
 	@NotNull
 	@AssertTrue
 	private Boolean status;
@@ -63,6 +65,15 @@ public class Brand {
 		this.brandName = brandName;
 		this.brandDescription = brandDescription;
 		this.status = status;
+	}
+
+	
+
+	public Brand(@Valid AddBrandRequest brandRequest) {
+		this.brandCode = brandRequest.getBrandCode();
+		this.brandName = brandRequest.getBrandName();
+		this.brandDescription = brandRequest.getBrandDescription();
+		this.status = new Boolean(true);
 	}
 
 	public String getBrandCode() {
@@ -149,7 +160,5 @@ public class Brand {
 			return false;
 		return true;
 	}
-	
-	
 
 }
