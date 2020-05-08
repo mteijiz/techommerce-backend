@@ -1,20 +1,23 @@
 package com.techommerce.backend.controller;
 
+import java.util.List;
+
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.techommerce.backend.entity.Brand;
 import com.techommerce.backend.request.AddBrandRequest;
 import com.techommerce.backend.response.AddedBrandResponse;
+import com.techommerce.backend.response.BrandResponse;
 import com.techommerce.backend.service.BrandService;
 
 @RestController
@@ -31,6 +34,13 @@ public class BrandController {
 		Brand brandAdded = brandService.addBrand(brandToAdd);
 		AddedBrandResponse brandAddedResponse = new AddedBrandResponse(brandAdded);
 		return new ResponseEntity<AddedBrandResponse>(brandAddedResponse, HttpStatus.OK);
+	}
+	
+	@GetMapping("/getAll")
+	public ResponseEntity<?> getAllBrand(){
+		List<Brand> brandsList = brandService.getAllBrands();
+		List<BrandResponse> brandResponsesList = brandService.buildBrandsResponseList(brandsList);
+		return new ResponseEntity<List<BrandResponse>>(brandResponsesList, HttpStatus.OK);
 	}
 
 }

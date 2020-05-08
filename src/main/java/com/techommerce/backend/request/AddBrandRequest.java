@@ -16,7 +16,7 @@ public class AddBrandRequest {
 	@NotBlank
 	private String brandName;
 
-	@Size(max = 30)
+	@Size(max = 50)
 	private String brandDescription;
 
 	public AddBrandRequest() {
