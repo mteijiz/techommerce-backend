@@ -42,5 +42,7 @@ public class BrandController {
 		List<BrandResponse> brandResponsesList = brandService.buildBrandsResponseList(brandsList);
 		return new ResponseEntity<List<BrandResponse>>(brandResponsesList, HttpStatus.OK);
 	}
+	
+	
 
 }
