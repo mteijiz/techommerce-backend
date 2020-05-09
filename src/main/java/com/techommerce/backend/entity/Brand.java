@@ -2,6 +2,8 @@ package com.techommerce.backend.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -24,7 +26,7 @@ import lombok.NoArgsConstructor;
 @Table(name = "brands", schema = "ecommerce")
 @Data
 @NoArgsConstructor
-@SQLDelete(sql="UPDATE brands SET ")
+@SQLDelete(sql="UPDATE ecommerce.brands SET brand_state = 'INACTIVE' WHERE brand_id = ?")
 public class Brand {
 
 	@Id
@@ -47,6 +49,7 @@ public class Brand {
 	private String brandDescription;
 
 	@NotNull
+	@Enumerated(EnumType.STRING)
 	private BrandState brandState;
 
 	public Brand(@Valid AddBrandRequest brandRequest) {
