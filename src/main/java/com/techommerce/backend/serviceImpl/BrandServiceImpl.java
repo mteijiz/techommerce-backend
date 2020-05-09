@@ -40,4 +40,9 @@ public class BrandServiceImpl implements BrandService {
 		return brandsResponseList;
 	}
 
+	@Override
+	public void deleteBrandById(Long brandId) {
+		brandRepository.deleteById(brandId);
+	}
+
 }
