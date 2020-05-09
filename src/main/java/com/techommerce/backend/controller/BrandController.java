@@ -50,7 +50,7 @@ public class BrandController {
 	@DeleteMapping("/delete/{brandId}")
 	public ResponseEntity<?> deleteBrandById(@PathVariable Long brandId){
 		brandService.deleteBrandById(brandId);
-		return new ResponseEntity<>(HttpStatus.ACCEPTED);
+		return new ResponseEntity<>(HttpStatus.OK);
 	}
 	
 	@PutMapping("/update")
