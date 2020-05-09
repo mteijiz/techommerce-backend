@@ -1,6 +1,7 @@
 package com.techommerce.backend.response;
 
 import com.techommerce.backend.entity.Brand;
+import com.techommerce.backend.entity.state.BrandState;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -13,14 +14,14 @@ public class AddedBrandResponse {
 	private String brandCode;
 	private String brandName;
 	private String brandDescription;
-	private Boolean status;
+	private BrandState brandState;
 
 	public AddedBrandResponse(Brand brandAdded) {
 		this.brandId = brandAdded.getBrandId();
 		this.brandCode = brandAdded.getBrandCode();
 		this.brandName = brandAdded.getBrandName();
 		this.brandDescription = brandAdded.getBrandDescription();
-		this.status = brandAdded.getStatus();
+		this.brandState = brandAdded.getBrandState();
 	}
 
 }

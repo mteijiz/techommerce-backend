@@ -12,6 +12,9 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import org.hibernate.annotations.SQLDelete;
+
+import com.techommerce.backend.entity.state.BrandState;
 import com.techommerce.backend.request.AddBrandRequest;
 
 import lombok.Data;
@@ -21,6 +24,7 @@ import lombok.NoArgsConstructor;
 @Table(name = "brands", schema = "ecommerce")
 @Data
 @NoArgsConstructor
+@SQLDelete(sql="UPDATE brands SET ")
 public class Brand {
 
 	@Id
@@ -43,14 +47,13 @@ public class Brand {
 	private String brandDescription;
 
 	@NotNull
-	@AssertTrue
-	private Boolean status;
+	private BrandState brandState;
 
 	public Brand(@Valid AddBrandRequest brandRequest) {
 		this.brandCode = brandRequest.getBrandCode();
 		this.brandName = brandRequest.getBrandName();
 		this.brandDescription = brandRequest.getBrandDescription();
-		this.status = new Boolean(true);
+		this.brandState = BrandState.valueOf("ACTIVE");
 	}
 
 }
