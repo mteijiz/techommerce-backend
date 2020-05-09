@@ -45,4 +45,10 @@ public class BrandServiceImpl implements BrandService {
 		brandRepository.deleteById(brandId);
 	}
 
+	@Override
+	public Brand updateBrand(Brand brandToUpdate) {
+		Brand brandUpdated = brandRepository.save(brandToUpdate);
+		return brandUpdated;
+	}
+
 }

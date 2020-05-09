@@ -18,6 +18,7 @@ import org.hibernate.annotations.SQLDelete;
 
 import com.techommerce.backend.entity.state.BrandState;
 import com.techommerce.backend.request.AddBrandRequest;
+import com.techommerce.backend.request.UpdateBrandRequest;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -57,6 +58,14 @@ public class Brand {
 		this.brandName = brandRequest.getBrandName();
 		this.brandDescription = brandRequest.getBrandDescription();
 		this.brandState = BrandState.valueOf("ACTIVE");
+	}
+
+	public Brand(@Valid UpdateBrandRequest brandRequest) {
+		this.brandId = brandRequest.getBrandId();
+		this.brandCode = brandRequest.getBrandCode();
+		this.brandName = brandRequest.getBrandName();
+		this.brandDescription = brandRequest.getBrandDescription();
+		this.brandState = brandRequest.getBrandState();
 	}
 
 }

@@ -14,5 +14,7 @@ public interface BrandService {
 	public abstract List<BrandResponse> buildBrandsResponseList(List<Brand> brandsList);
 
 	public abstract void deleteBrandById(Long brandId);
+
+	public abstract Brand updateBrand(Brand brandToUpdate);
 	
 }
