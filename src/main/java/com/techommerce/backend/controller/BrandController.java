@@ -60,5 +60,13 @@ public class BrandController {
 		BrandResponse brandUpdatedResponse = new BrandResponse(brandUpdated);
 		return new ResponseEntity<BrandResponse>(brandUpdatedResponse, HttpStatus.OK);
 	}
+	
+	@PutMapping("/changeStatus")
+	public ResponseEntity<?> changeStatus(@Valid @RequestBody UpdateBrandRequest brandRequest){
+		Brand brandToChangeStatus = new Brand(brandRequest);
+		Brand brandWithChangedStatus = brandService.changeStatusOfBrand(brandToChangeStatus);
+		BrandResponse brandChanged = new BrandResponse(brandWithChangedStatus);
+		return new ResponseEntity<BrandResponse>(brandChanged, HttpStatus.OK);
+	}
 
 }

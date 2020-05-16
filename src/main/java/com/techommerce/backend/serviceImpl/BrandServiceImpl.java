@@ -27,6 +27,7 @@ public class BrandServiceImpl implements BrandService {
 
 	@Override
 	public Brand addBrand(Brand brandToAdd) {
+		brandCodeAndNameUppercase(brandToAdd);
 		try {
 			Brand brandCreated = brandRepository.save(brandToAdd);
 			return brandCreated;
@@ -64,15 +65,30 @@ public class BrandServiceImpl implements BrandService {
 		try {
 			brandRepository.deleteById(brandId);
 		} catch (EmptyResultDataAccessException e) {
-			// TODO Auto-generated catch block
 			throw new NotExistingBrandException(e.getMessage(), e);
 		}
 	}
 
 	@Override
 	public Brand updateBrand(Brand brandToUpdate) {
+		brandCodeAndNameUppercase(brandToUpdate);
 		Brand brandUpdated = brandRepository.save(brandToUpdate);
 		return brandUpdated;
+	}
+	
+	public void brandCodeAndNameUppercase(Brand brand) {
+		brand.setBrandCode(brand.getBrandCode().toUpperCase());
+		brand.setBrandName(brand.getBrandName().toUpperCase());
+	}
+
+	@Override
+	public Brand changeStatusOfBrand(Brand brandToChangeStatus) {
+		if(brandToChangeStatus.getBrandState()) 
+			brandToChangeStatus.setBrandState(false);
+		else 
+			brandToChangeStatus.setBrandState(true);
+		Brand brandChanged = brandRepository.save(brandToChangeStatus);
+		return brandChanged;
 	}
 
 }

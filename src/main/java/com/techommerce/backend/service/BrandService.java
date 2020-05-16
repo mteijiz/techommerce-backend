@@ -16,5 +16,7 @@ public interface BrandService {
 	public abstract void deleteBrandById(Long brandId);
 
 	public abstract Brand updateBrand(Brand brandToUpdate);
+
+	public abstract Brand changeStatusOfBrand(Brand brandToChangeStatus);
 	
 }
