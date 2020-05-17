@@ -1,11 +1,14 @@
 package com.techommerce.backend.controller;
 
+import java.util.List;
+
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -32,4 +35,11 @@ public class CategoryController {
 		return new ResponseEntity<CategoryResponse>(categoryResponse, HttpStatus.OK);
 	}
 
+	@GetMapping("/getAll")
+	public ResponseEntity<?> getAllCategories(){
+		List<Category> categoryList = categoryService.getAll();
+		List<CategoryResponse> categoryResponseList = categoryService.buildCategoryResponseList(categoryList);
+		return new ResponseEntity<List<CategoryResponse>>(categoryResponseList, HttpStatus.OK);
+	}
+	
 }
