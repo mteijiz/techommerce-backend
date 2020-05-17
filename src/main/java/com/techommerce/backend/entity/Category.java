@@ -6,18 +6,23 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+
+import com.techommerce.backend.request.AddCategoryRequest;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "category", schema = "ecommerce")
+@Table(name = "categories", schema = "ecommerce")
 @Data
 @NoArgsConstructor
 public class Category {
+
+	
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -41,4 +46,10 @@ public class Category {
 	@NotNull
 	private Boolean categoryState;
 	
+	public Category(@Valid AddCategoryRequest categoryRequest) {
+		this.categoryCode = categoryRequest.getCategoryCode();
+		this.categoryName = categoryRequest.getCategoryName();
+		this.categoryDescription = categoryRequest.getCategoryDescription();
+		this.categoryState = true;
+	}
 }

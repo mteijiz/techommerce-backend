@@ -20,7 +20,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.techommerce.backend.entity.Brand;
 import com.techommerce.backend.request.AddBrandRequest;
 import com.techommerce.backend.request.UpdateBrandRequest;
-import com.techommerce.backend.response.AddedBrandResponse;
 import com.techommerce.backend.response.BrandResponse;
 import com.techommerce.backend.service.BrandService;
 
@@ -36,8 +35,8 @@ public class BrandController {
 	public ResponseEntity<?> addBrand(@Valid @RequestBody AddBrandRequest brandRequest) {
 		Brand brandToAdd = new Brand(brandRequest);
 		Brand brandAdded = brandService.addBrand(brandToAdd);
-		AddedBrandResponse brandAddedResponse = new AddedBrandResponse(brandAdded);
-		return new ResponseEntity<AddedBrandResponse>(brandAddedResponse, HttpStatus.OK);
+		BrandResponse brandAddedResponse = new BrandResponse(brandAdded);
+		return new ResponseEntity<BrandResponse>(brandAddedResponse, HttpStatus.OK);
 	}
 	
 	@GetMapping("/getAll")
