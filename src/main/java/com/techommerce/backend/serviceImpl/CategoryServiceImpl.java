@@ -3,12 +3,15 @@ package com.techommerce.backend.serviceImpl;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.techommerce.backend.entity.Category;
 import com.techommerce.backend.exception.EmptyCategoryListException;
 import com.techommerce.backend.repository.CategoryRepository;
+import com.techommerce.backend.request.UpdateCategoryRequest;
 import com.techommerce.backend.response.CategoryResponse;
 import com.techommerce.backend.service.CategoryService;
 
@@ -20,14 +23,12 @@ public class CategoryServiceImpl implements CategoryService {
 	
 	@Override
 	public Category addCategory(Category categoryToAdd) {
-		// TODO Auto-generated method stub
 		categoryCodaAndNameToUpperCase(categoryToAdd);
 		Category categoryAdded = categoryRepository.save(categoryToAdd);
 		return categoryAdded;
 	}
 
 	private void categoryCodaAndNameToUpperCase(Category categoryToAdd) {
-		// TODO Auto-generated method stub
 		categoryToAdd.setCategoryCode(categoryToAdd.getCategoryCode().toUpperCase());
 		categoryToAdd.setCategoryName(categoryToAdd.getCategoryName().toUpperCase());
 	}
@@ -50,9 +51,29 @@ public class CategoryServiceImpl implements CategoryService {
 	}
 
 	private void checkIfCategoryListIsEmpty(List<Category> categoryList) {
-		// TODO Auto-generated method stub
 		if(categoryList.isEmpty())
 			throw new EmptyCategoryListException("There are no categories");
 	}
+
+	@Override
+	public Category updateCategory(Category categoryToUpdate) {
+		categoryCodaAndNameToUpperCase(categoryToUpdate);
+		Category categoryUpdated = categoryRepository.save(categoryToUpdate);
+		return categoryUpdated;
+	}
+
+	@Override
+	public Category updateCategoryState(Category categoryToUpdateState) {
+		if(categoryToUpdateState.getCategoryState())
+			categoryToUpdateState.setCategoryState(false);
+		else
+			categoryToUpdateState.setCategoryState(true);
+		Category categoryUpdated = categoryRepository.save(categoryToUpdateState);
+		return categoryUpdated;
+	}
+
+	
+
+	
 
 }

@@ -5,11 +5,11 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 @Data
-@NoArgsConstructor
-public class AddCategoryRequest {
+public class UpdateCategoryRequest {
+
+	private Long categoryId;
 
 	@NotNull
 	@Size(min = 1, max = 10)
@@ -23,5 +23,8 @@ public class AddCategoryRequest {
 
 	@Size(max = 50)
 	private String categoryDescription;
+
+	@NotNull
+	private Boolean categoryState;
 
 }

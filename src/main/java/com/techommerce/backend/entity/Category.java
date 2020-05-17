@@ -12,6 +12,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import com.techommerce.backend.request.AddCategoryRequest;
+import com.techommerce.backend.request.UpdateCategoryRequest;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -51,5 +52,13 @@ public class Category {
 		this.categoryName = categoryRequest.getCategoryName();
 		this.categoryDescription = categoryRequest.getCategoryDescription();
 		this.categoryState = true;
+	}
+
+	public Category(@Valid UpdateCategoryRequest categoryRequest) {
+		this.categoryId = categoryRequest.getCategoryId();
+		this.categoryCode =categoryRequest.getCategoryCode();
+		this.categoryName = categoryRequest.getCategoryName();
+		this.categoryDescription = categoryRequest.getCategoryDescription();
+		this.categoryState = categoryRequest.getCategoryState();
 	}
 }
