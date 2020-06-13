@@ -12,6 +12,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import com.techommerce.backend.request.AddCategoryRequest;
+import com.techommerce.backend.request.SearchByCategoryRequest;
 import com.techommerce.backend.request.UpdateCategoryRequest;
 
 import lombok.Data;
@@ -22,8 +23,6 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 public class Category {
-
-	
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -46,7 +45,8 @@ public class Category {
 
 	@NotNull
 	private Boolean categoryState;
-	
+
+
 	public Category(@Valid AddCategoryRequest categoryRequest) {
 		this.categoryCode = categoryRequest.getCategoryCode();
 		this.categoryName = categoryRequest.getCategoryName();
@@ -56,9 +56,20 @@ public class Category {
 
 	public Category(@Valid UpdateCategoryRequest categoryRequest) {
 		this.categoryId = categoryRequest.getCategoryId();
-		this.categoryCode =categoryRequest.getCategoryCode();
+		this.categoryCode = categoryRequest.getCategoryCode();
 		this.categoryName = categoryRequest.getCategoryName();
 		this.categoryDescription = categoryRequest.getCategoryDescription();
 		this.categoryState = categoryRequest.getCategoryState();
 	}
+
+	public Category(@Valid SearchByCategoryRequest categoryRequest) {
+		// TODO Auto-generated constructor stub
+		this.categoryId = categoryRequest.getCategoryId();
+		this.categoryCode = categoryRequest.getCategoryCode();
+		this.categoryName = categoryRequest.getCategoryName();
+		this.categoryDescription = categoryRequest.getCategoryDescription();
+		this.categoryState = categoryRequest.getCategoryState();
+	}
+
+
 }

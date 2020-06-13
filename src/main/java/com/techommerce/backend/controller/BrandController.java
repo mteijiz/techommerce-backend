@@ -4,9 +4,13 @@ import java.util.List;
 
 import javax.validation.Valid;
 
+import org.keycloak.KeycloakPrincipal;
+import org.keycloak.KeycloakSecurityContext;
+import org.keycloak.adapters.springsecurity.token.KeycloakAuthenticationToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -41,6 +45,11 @@ public class BrandController {
 	
 	@GetMapping("/getAll")
 	public ResponseEntity<?> getAllBrand(){
+		KeycloakAuthenticationToken authentication = (KeycloakAuthenticationToken) SecurityContextHolder.getContext()
+                .getAuthentication();
+        KeycloakPrincipal<KeycloakSecurityContext> keycloakPrincipal = (KeycloakPrincipal<KeycloakSecurityContext>) authentication
+                .getPrincipal();
+        System.out.println(keycloakPrincipal.getKeycloakSecurityContext().getTokenString());
 		List<Brand> brandsList = brandService.getAllBrands();
 		List<BrandResponse> brandResponsesList = brandService.buildBrandsResponseList(brandsList);
 		return new ResponseEntity<List<BrandResponse>>(brandResponsesList, HttpStatus.OK);

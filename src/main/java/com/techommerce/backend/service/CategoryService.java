@@ -20,4 +20,6 @@ public interface CategoryService {
 
 	Category updateCategoryState(Category categoryToUpdateState);
 
+	Category searchCategoryById(Long categoryId);
+
 }

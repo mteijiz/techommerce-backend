@@ -3,24 +3,29 @@ package com.techommerce.backend.serviceImpl;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.validation.Valid;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.techommerce.backend.entity.Category;
 import com.techommerce.backend.exception.EmptyCategoryListException;
 import com.techommerce.backend.repository.CategoryRepository;
-import com.techommerce.backend.request.UpdateCategoryRequest;
 import com.techommerce.backend.response.CategoryResponse;
 import com.techommerce.backend.service.CategoryService;
+import com.techommerce.backend.service.ProductService;
+import com.techommerce.backend.service.SubcategoryService;
 
 @Service
 public class CategoryServiceImpl implements CategoryService {
 
 	@Autowired
 	private CategoryRepository categoryRepository;
+
+	@Autowired
+	private SubcategoryService subcategoryService;
 	
+	@Autowired
+	private ProductService productService;
+
 	@Override
 	public Category addCategory(Category categoryToAdd) {
 		categoryCodaAndNameToUpperCase(categoryToAdd);
@@ -43,7 +48,7 @@ public class CategoryServiceImpl implements CategoryService {
 	public List<CategoryResponse> buildCategoryResponseList(List<Category> categoryList) {
 		checkIfCategoryListIsEmpty(categoryList);
 		List<CategoryResponse> categoryListResponse = new ArrayList<CategoryResponse>();
-		for(Category category : categoryList) {
+		for (Category category : categoryList) {
 			CategoryResponse auxCategoryResponse = new CategoryResponse(category);
 			categoryListResponse.add(auxCategoryResponse);
 		}
@@ -51,7 +56,7 @@ public class CategoryServiceImpl implements CategoryService {
 	}
 
 	private void checkIfCategoryListIsEmpty(List<Category> categoryList) {
-		if(categoryList.isEmpty())
+		if (categoryList.isEmpty())
 			throw new EmptyCategoryListException("There are no categories");
 	}
 
@@ -64,16 +69,25 @@ public class CategoryServiceImpl implements CategoryService {
 
 	@Override
 	public Category updateCategoryState(Category categoryToUpdateState) {
-		if(categoryToUpdateState.getCategoryState())
+		if (categoryToUpdateState.getCategoryState()) {
 			categoryToUpdateState.setCategoryState(false);
-		else
+			subcategoryService.changingActiveStateOfSubcategoriesBelongToCategory(categoryToUpdateState);
+			productService.changingActiveStateOfProductsBelongToCategory(categoryToUpdateState);
+		}
+		else {
 			categoryToUpdateState.setCategoryState(true);
+			subcategoryService.changingInactiveStateOfSubcategoriesBelongToCategory(categoryToUpdateState);
+			productService.changingInactiveStateOfProductsBelongToCategory(categoryToUpdateState);
+		}
 		Category categoryUpdated = categoryRepository.save(categoryToUpdateState);
 		return categoryUpdated;
 	}
 
-	
-
-	
+	@Override
+	public Category searchCategoryById(Long categoryId) {
+		// TODO Auto-generated method stub
+		Category category = categoryRepository.findById(categoryId).get();
+		return category;
+	}
 
 }

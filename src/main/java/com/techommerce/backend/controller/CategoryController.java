@@ -20,6 +20,7 @@ import com.techommerce.backend.request.AddCategoryRequest;
 import com.techommerce.backend.request.UpdateCategoryRequest;
 import com.techommerce.backend.response.CategoryResponse;
 import com.techommerce.backend.service.CategoryService;
+import com.techommerce.backend.service.SubcategoryService;
 
 @RestController
 @RequestMapping("categories")
@@ -38,26 +39,26 @@ public class CategoryController {
 	}
 
 	@GetMapping("/getAll")
-	public ResponseEntity<?> getAllCategories(){
+	public ResponseEntity<?> getAllCategories() {
 		List<Category> categoryList = categoryService.getAll();
 		List<CategoryResponse> categoryResponseList = categoryService.buildCategoryResponseList(categoryList);
 		return new ResponseEntity<List<CategoryResponse>>(categoryResponseList, HttpStatus.OK);
 	}
-	
+
 	@PutMapping("/update")
-	public ResponseEntity<?> updateCategory(@Valid @RequestBody UpdateCategoryRequest categoryRequest){
+	public ResponseEntity<?> updateCategory(@Valid @RequestBody UpdateCategoryRequest categoryRequest) {
 		Category categoryToUpdate = new Category(categoryRequest);
 		Category categoryUpdated = categoryService.updateCategory(categoryToUpdate);
 		CategoryResponse categoryResponse = new CategoryResponse(categoryUpdated);
 		return new ResponseEntity<CategoryResponse>(categoryResponse, HttpStatus.OK);
 	}
-	
+
 	@PutMapping("/updateState")
-	public ResponseEntity<?> updateCategoryState(@RequestBody UpdateCategoryRequest categoryRequest){
+	public ResponseEntity<?> updateCategoryState(@RequestBody UpdateCategoryRequest categoryRequest) {
 		Category categoryToUpdateState = new Category(categoryRequest);
 		Category categoryUpdated = categoryService.updateCategoryState(categoryToUpdateState);
 		CategoryResponse categoryResponse = new CategoryResponse(categoryUpdated);
 		return new ResponseEntity<CategoryResponse>(categoryResponse, HttpStatus.OK);
 	}
-	
+
 }
