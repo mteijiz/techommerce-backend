@@ -2,6 +2,7 @@ package com.techommerce.backend.controller;
 
 import java.util.List;
 
+import javax.annotation.security.RolesAllowed;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,47 +19,56 @@ import org.springframework.web.bind.annotation.RestController;
 import com.techommerce.backend.entity.Category;
 import com.techommerce.backend.request.AddCategoryRequest;
 import com.techommerce.backend.request.UpdateCategoryRequest;
-import com.techommerce.backend.response.CategoryResponse;
+import com.techommerce.backend.response.CategoryWithoutSubcategoriesResponse;
 import com.techommerce.backend.service.CategoryService;
-import com.techommerce.backend.service.SubcategoryService;
 
 @RestController
 @RequestMapping("categories")
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = "${spring.frontend.url}")
 public class CategoryController {
 
 	@Autowired
 	private CategoryService categoryService;
 
 	@PostMapping("/add")
-	public ResponseEntity<?> addCategory(@Valid @RequestBody AddCategoryRequest categoryRequest) {
-		Category categoryToAdd = new Category(categoryRequest);
+	@RolesAllowed("admin")
+	public ResponseEntity<?> addCategory(@RequestBody AddCategoryRequest request) {
+		@Valid Category categoryToAdd = new Category(request);
 		Category categoryAdded = categoryService.addCategory(categoryToAdd);
-		CategoryResponse categoryResponse = new CategoryResponse(categoryAdded);
-		return new ResponseEntity<CategoryResponse>(categoryResponse, HttpStatus.OK);
+		CategoryWithoutSubcategoriesResponse categoryResponse = new CategoryWithoutSubcategoriesResponse(categoryAdded);
+		return new ResponseEntity<CategoryWithoutSubcategoriesResponse>(categoryResponse, HttpStatus.OK);
 	}
-
+	
 	@GetMapping("/getAll")
 	public ResponseEntity<?> getAllCategories() {
-		List<Category> categoryList = categoryService.getAll();
-		List<CategoryResponse> categoryResponseList = categoryService.buildCategoryResponseList(categoryList);
-		return new ResponseEntity<List<CategoryResponse>>(categoryResponseList, HttpStatus.OK);
+		List<Category> categoryList = categoryService.getAllCategories();
+		List<CategoryWithoutSubcategoriesResponse> categoryResponseList = categoryService.buildCategoryResponseList(categoryList);
+		return new ResponseEntity<List<CategoryWithoutSubcategoriesResponse>>(categoryResponseList, HttpStatus.OK);
 	}
 
 	@PutMapping("/update")
-	public ResponseEntity<?> updateCategory(@Valid @RequestBody UpdateCategoryRequest categoryRequest) {
-		Category categoryToUpdate = new Category(categoryRequest);
+	@RolesAllowed("admin")
+	public ResponseEntity<?> updateCategory(@RequestBody UpdateCategoryRequest request) {
+		@Valid Category categoryToUpdate = new Category(request);
 		Category categoryUpdated = categoryService.updateCategory(categoryToUpdate);
-		CategoryResponse categoryResponse = new CategoryResponse(categoryUpdated);
-		return new ResponseEntity<CategoryResponse>(categoryResponse, HttpStatus.OK);
+		CategoryWithoutSubcategoriesResponse categoryResponse = new CategoryWithoutSubcategoriesResponse(categoryUpdated);
+		return new ResponseEntity<CategoryWithoutSubcategoriesResponse>(categoryResponse, HttpStatus.OK);
 	}
 
-	@PutMapping("/updateState")
-	public ResponseEntity<?> updateCategoryState(@RequestBody UpdateCategoryRequest categoryRequest) {
-		Category categoryToUpdateState = new Category(categoryRequest);
-		Category categoryUpdated = categoryService.updateCategoryState(categoryToUpdateState);
-		CategoryResponse categoryResponse = new CategoryResponse(categoryUpdated);
-		return new ResponseEntity<CategoryResponse>(categoryResponse, HttpStatus.OK);
+//	@PutMapping("/updateState")
+//	@RolesAllowed("admin")
+//	public ResponseEntity<?> updateCategoryState(@RequestBody UpdateCategoryRequest request) {
+//		@Valid Category categoryToUpdateState = new Category(request);
+//		Category categoryUpdated = categoryService.updateCategoryState(categoryToUpdateState);
+//		CategoryWithoutSubcategoriesResponse categoryResponse = new CategoryWithoutSubcategoriesResponse(categoryUpdated);
+//		return new ResponseEntity<CategoryWithoutSubcategoriesResponse>(categoryResponse, HttpStatus.OK);
+//	}
+	
+	@GetMapping("/getActive")
+	public ResponseEntity<?> getActiveCategories() {
+		List<Category> categoryList = categoryService.getActiveBrands();
+		List<CategoryWithoutSubcategoriesResponse> categoryResponseList = categoryService.buildCategoryResponseList(categoryList);
+		return new ResponseEntity<List<CategoryWithoutSubcategoriesResponse>>(categoryResponseList, HttpStatus.OK);
 	}
 
 }

@@ -37,38 +37,43 @@ public class Product {
 	private Long productId;
 
 	@Column(unique = true)
-	@NotNull
-	@NotBlank
-	@Size(min = 1, max = 10)
+	@NotNull(message="El producto tiene que tener un código")
+	@NotBlank(message="El código del producto no puede estar en blanco")
+	@Size(min = 1, max = 10, message="El código del producto tiene que estar entre 1 y 10 caracteres")
 	private String productCode;
 
 	@Column(unique = true)
-	@NotNull
-	@NotBlank
-	@Size(min = 1, max = 15)
+	@NotNull(message="El producto tiene que tener un nombre")
+	@NotBlank(message="El nombre del producto no puede estar en blanco")
+	@Size(min = 1, max = 15, message="El nombre del producto tiene que estar entre 1 y 15 caracteres")
 	private String productName;
 
-	@Size(max = 50)
+	@Size(max = 1000, message="La descripción del producto tiene que ser menor de 1000 caracteres")
 	private String productDescription;
 
 	@Column(nullable = false)
-	@NotNull
+	@NotNull(message="El producto debe tener un precio")
 	@Min(0)
 	private Float productPrice;
 
 	@Column(nullable = false)
-	@NotNull
+	@NotNull(message="El producto debe tener una cantidad asignada")
 	@Min(0)
 	private Integer productQuantity;
 
 	@Column(nullable = false)
 	@Min(0)
 	private Float productRate;
+	
+	@Column(nullable = false)
+	@Min(0)
+	private Float productTotalPoints;
 
 	@Column(nullable = false)
+	@Min(0)
 	private Integer productQuantityOfVotes;
 
-	@NotNull
+	@NotNull(message="El producto debe tener un estado")
 	private Boolean productState;
 
 	@ManyToOne
@@ -86,28 +91,28 @@ public class Product {
 	@OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
 	private List<Image> productImages = new ArrayList<>();
 
-	public Product(@Valid AddProductRequest productRequest) {
-		// TODO Auto-generated constructor stub
+	public Product(AddProductRequest productRequest) {
 		this.productCode = productRequest.getProductCode();
 		this.productName = productRequest.getProductName();
 		this.productDescription = productRequest.getProductDescription();
 		this.productQuantityOfVotes = new Integer(0);
+		this.productTotalPoints = new Float(0);
 		this.productRate = new Float(0);
 		this.productPrice = productRequest.getProductPrice();
 		this.productQuantity = productRequest.getProductQuantity();
 		this.productBrand = productRequest.getProductBrand();
 		this.productCategory = productRequest.getProductSubcategory().getCategory();
 		this.productSubcategory = productRequest.getProductSubcategory();
-		this.productState = true;
+		this.productState = productRequest.getProductState();
 	}
 
 	public Product(UpdateProductRequest productRequest) {
-		// TODO Auto-generated constructor stub
 		this.productId = productRequest.getProductId();
 		this.productCode = productRequest.getProductCode();
 		this.productName = productRequest.getProductName();
 		this.productDescription = productRequest.getProductDescription();
 		this.productQuantityOfVotes = productRequest.getProductQuantityOfVotes();
+		this.productTotalPoints = productRequest.getProductTotalPoints();
 		this.productRate = productRequest.getProductRate();
 		this.productPrice = productRequest.getProductPrice();
 		this.productQuantity = productRequest.getProductQuantity();

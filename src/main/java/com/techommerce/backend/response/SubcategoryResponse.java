@@ -14,16 +14,17 @@ public class SubcategoryResponse {
 	private String subcategoryName;
 	private String subcategoryDescription;
 	private Boolean subcategoryState;
-	private Category category;
+	private CategoryWithoutSubcategoriesResponse category;
 	
 	
 	public SubcategoryResponse(Subcategory subcategory) {
-		// TODO Auto-generated constructor stub
 		this.subcategoryId = subcategory.getSubcategoryId();
 		this.subcategoryName = subcategory.getSubcategoryName();
 		this.subcategoryDescription = subcategory.getSubcategoryDescription();
 		this.subcategoryCode = subcategory.getSubcategoryCode();
 		this.subcategoryState = subcategory.getSubcategoryState();
-		this.category = subcategory.getCategory();
+		this.category = new CategoryWithoutSubcategoriesResponse(subcategory.getCategory());
 	}
+	
+	
 }

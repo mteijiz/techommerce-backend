@@ -2,6 +2,7 @@ package com.techommerce.backend.controller;
 
 import java.util.List;
 
+import javax.annotation.security.RolesAllowed;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +20,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.techommerce.backend.entity.Category;
 import com.techommerce.backend.entity.Subcategory;
 import com.techommerce.backend.request.AddSubcategoryRequest;
-import com.techommerce.backend.request.SearchByCategoryRequest;
 import com.techommerce.backend.request.UpdateSubcategoryRequest;
 import com.techommerce.backend.response.SubcategoryResponse;
 import com.techommerce.backend.service.CategoryService;
@@ -27,7 +27,7 @@ import com.techommerce.backend.service.SubcategoryService;
 
 @RestController
 @RequestMapping("subcategories")
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = "${spring.frontend.url}")
 public class SubcategoryController {
 	
 	@Autowired
@@ -37,16 +37,17 @@ public class SubcategoryController {
 	private CategoryService categoryService;
 	
 	@PostMapping("/add")
-	public ResponseEntity<?> addSubCategory(@Valid @RequestBody AddSubcategoryRequest subcategoryRequest){
-		Subcategory subcategoryToAdd = new Subcategory(subcategoryRequest);
-		Subcategory subcategoryAdded = subcategoryService.add(subcategoryToAdd);
+	@RolesAllowed("admin")
+	public ResponseEntity<?> addSubCategory(@RequestBody AddSubcategoryRequest subcategoryRequest){
+		@Valid Subcategory subcategoryToAdd = new Subcategory(subcategoryRequest);
+		Subcategory subcategoryAdded = subcategoryService.addNewSubcategory(subcategoryToAdd);
 		SubcategoryResponse subcategoryResponse = new SubcategoryResponse(subcategoryAdded);
 		return new ResponseEntity<SubcategoryResponse>(subcategoryResponse, HttpStatus.OK);
 	}
 	
 	@GetMapping("/getAll")
 	public ResponseEntity<?> getAllSubcategories(){
-		List<Subcategory> subcategoriesList = subcategoryService.getAll();
+		List<Subcategory> subcategoriesList = subcategoryService.getAllSubcategories();
 		List<SubcategoryResponse> subcategoriesResponseList = subcategoryService.buildSubcategoryResponseList(subcategoriesList);
 		return new ResponseEntity<List<SubcategoryResponse>>(subcategoriesResponseList, HttpStatus.OK);
 	}
@@ -59,20 +60,29 @@ public class SubcategoryController {
 		return new ResponseEntity<List<SubcategoryResponse>>(subcategoryResponsesList, HttpStatus.OK);
 	}
 	
-	@PutMapping("/updateState")
-	public ResponseEntity<?> updateSubcategoryState(@Valid @RequestBody UpdateSubcategoryRequest subcategoryRequest){
-		Subcategory subcategoryToUpdateState = new Subcategory(subcategoryRequest);
-		Subcategory subcategoryStateUpdated = subcategoryService.updateState(subcategoryToUpdateState);
-		SubcategoryResponse subcategoryUpdatedResponse = new SubcategoryResponse(subcategoryStateUpdated);
-		return new ResponseEntity<SubcategoryResponse>(subcategoryUpdatedResponse, HttpStatus.OK);
-	}
+//	@PutMapping("/updateState")
+//	@RolesAllowed("admin")
+//	public ResponseEntity<?> updateSubcategoryState(@RequestBody UpdateSubcategoryRequest subcategoryRequest){
+//		@Valid Subcategory subcategoryToUpdateState = new Subcategory(subcategoryRequest);
+//		Subcategory subcategoryStateUpdated = subcategoryService.updateState(subcategoryToUpdateState);
+//		SubcategoryResponse subcategoryUpdatedResponse = new SubcategoryResponse(subcategoryStateUpdated);
+//		return new ResponseEntity<SubcategoryResponse>(subcategoryUpdatedResponse, HttpStatus.OK);
+//	}
 	
 	@PutMapping("/update")
-	public ResponseEntity<?> updateSubcategory(@Valid @RequestBody UpdateSubcategoryRequest subcategoryRequest){
-		Subcategory subcategoryToUpdate = new Subcategory(subcategoryRequest);
+	@RolesAllowed("admin")
+	public ResponseEntity<?> updateSubcategory(@RequestBody UpdateSubcategoryRequest subcategoryRequest){
+		@Valid Subcategory subcategoryToUpdate = new Subcategory(subcategoryRequest);
 		Subcategory subcategoryUpdated = subcategoryService.updateSubcategory(subcategoryToUpdate);
 		SubcategoryResponse subcategoryUpdatedResponse = new SubcategoryResponse(subcategoryUpdated);
 		return new ResponseEntity<SubcategoryResponse>(subcategoryUpdatedResponse, HttpStatus.OK);
+	}
+	
+	@GetMapping("/getActive")
+	public ResponseEntity<?> getActiveSubcategories(){
+		List<Subcategory> subcategoriesList = subcategoryService.getActiveSubcategories();
+		List<SubcategoryResponse> subcategoriesResponseList = subcategoryService.buildSubcategoryResponseList(subcategoriesList);
+		return new ResponseEntity<List<SubcategoryResponse>>(subcategoriesResponseList, HttpStatus.OK);
 	}
 	
 }

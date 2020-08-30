@@ -25,5 +25,13 @@ public interface ImageService {
 
 	void convertImageListToResponse(ProductResponse auxProductResponse, Product product);
 
+	void uploadMainImages(MultipartFile[] image, Product productToAddimage);
+
+	void checkIfImageListIsEmptyAndGetMissingImagen(List<ImageResponse> imageResponseList);
+
+	List<Image> getMainImagesOfProduct(Product product);
+
+	List<Image> searchImagesOfAProduct(Product product);
+
 
 }

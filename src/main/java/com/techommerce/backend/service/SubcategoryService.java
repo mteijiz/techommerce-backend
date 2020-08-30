@@ -8,20 +8,22 @@ import com.techommerce.backend.response.SubcategoryResponse;
 
 public interface SubcategoryService {
 
-	Subcategory add(Subcategory subcategoryToAdd);
+	Subcategory addNewSubcategory(Subcategory subcategoryToAdd);
 
-	List<Subcategory> getAll();
+	List<Subcategory> getAllSubcategories();
 
 	List<SubcategoryResponse> buildSubcategoryResponseList(List<Subcategory> subcategoriesList);
 
-	Subcategory updateState(Subcategory subcategoryToUpdateState);
+	//Subcategory updateState(Subcategory subcategoryToUpdateState);
 
 	Subcategory updateSubcategory(Subcategory subcategoryToUpdate);
 
-	void changingActiveStateOfSubcategoriesBelongToCategory(Category categoryToUpdateState);
+	//void changingActiveStateOfSubcategoriesBelongToCategory(Category categoryToUpdateState);
 
-	void changingInactiveStateOfSubcategoriesBelongToCategory(Category categoryToUpdateState);
+	//void changingInactiveStateOfSubcategoriesBelongToCategory(Category categoryToUpdateState);
 
 	List<Subcategory> getSubcategoryByCategory(Category category);
+
+	List<Subcategory> getActiveSubcategories();
 
 }

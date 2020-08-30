@@ -2,15 +2,13 @@ package com.techommerce.backend.controller;
 
 import java.util.List;
 
+import javax.annotation.security.RolesAllowed;
 import javax.validation.Valid;
 
-import org.keycloak.KeycloakPrincipal;
-import org.keycloak.KeycloakSecurityContext;
-import org.keycloak.adapters.springsecurity.token.KeycloakAuthenticationToken;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -29,52 +27,51 @@ import com.techommerce.backend.service.BrandService;
 
 @RestController
 @RequestMapping("brands")
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = "${spring.frontend.url}")
 public class BrandController {
 
 	@Autowired
 	private BrandService brandService;
-	
+
 	@PostMapping("/add")
-	public ResponseEntity<?> addBrand(@Valid @RequestBody AddBrandRequest brandRequest) {
-		Brand brandToAdd = new Brand(brandRequest);
+	@RolesAllowed("admin")
+	public ResponseEntity<?> add(@RequestBody AddBrandRequest request) {
+		@Valid Brand brandToAdd = new Brand(request);
 		Brand brandAdded = brandService.addBrand(brandToAdd);
 		BrandResponse brandAddedResponse = new BrandResponse(brandAdded);
 		return new ResponseEntity<BrandResponse>(brandAddedResponse, HttpStatus.OK);
 	}
-	
+
 	@GetMapping("/getAll")
-	public ResponseEntity<?> getAllBrand(){
-		KeycloakAuthenticationToken authentication = (KeycloakAuthenticationToken) SecurityContextHolder.getContext()
-                .getAuthentication();
-        KeycloakPrincipal<KeycloakSecurityContext> keycloakPrincipal = (KeycloakPrincipal<KeycloakSecurityContext>) authentication
-                .getPrincipal();
-        System.out.println(keycloakPrincipal.getKeycloakSecurityContext().getTokenString());
+	public ResponseEntity<?> getAll() {
 		List<Brand> brandsList = brandService.getAllBrands();
 		List<BrandResponse> brandResponsesList = brandService.buildBrandsResponseList(brandsList);
 		return new ResponseEntity<List<BrandResponse>>(brandResponsesList, HttpStatus.OK);
 	}
-	
-	@DeleteMapping("/delete/{brandId}")
-	public ResponseEntity<?> deleteBrandById(@PathVariable Long brandId){
-		brandService.deleteBrandById(brandId);
-		return new ResponseEntity<>(HttpStatus.OK);
-	}
-	
+
 	@PutMapping("/update")
-	public ResponseEntity<?> updateBrand(@Valid @RequestBody UpdateBrandRequest brandRequest){
-		Brand brandToUpdate = new Brand(brandRequest);
+	@RolesAllowed("admin")
+	public ResponseEntity<?> updateBrand(@RequestBody UpdateBrandRequest request) {
+		@Valid Brand brandToUpdate = new Brand(request);
 		Brand brandUpdated = brandService.updateBrand(brandToUpdate);
 		BrandResponse brandUpdatedResponse = new BrandResponse(brandUpdated);
 		return new ResponseEntity<BrandResponse>(brandUpdatedResponse, HttpStatus.OK);
 	}
+
+//	@PutMapping("/changeStatus")
+//	@RolesAllowed("admin")
+//	public ResponseEntity<?> changeStatus(@Valid @RequestBody UpdateBrandRequest brandRequest) {
+//		Brand brandToChangeStatus = new Brand(brandRequest);
+//		Brand brandWithChangedStatus = brandService.changeStatusOfBrand(brandToChangeStatus);
+//		BrandResponse brandChanged = new BrandResponse(brandWithChangedStatus);
+//		return new ResponseEntity<BrandResponse>(brandChanged, HttpStatus.OK);
+//	}
 	
-	@PutMapping("/changeStatus")
-	public ResponseEntity<?> changeStatus(@Valid @RequestBody UpdateBrandRequest brandRequest){
-		Brand brandToChangeStatus = new Brand(brandRequest);
-		Brand brandWithChangedStatus = brandService.changeStatusOfBrand(brandToChangeStatus);
-		BrandResponse brandChanged = new BrandResponse(brandWithChangedStatus);
-		return new ResponseEntity<BrandResponse>(brandChanged, HttpStatus.OK);
+	@GetMapping("/getActive")
+	public ResponseEntity<?> getActiveBrand() {
+		List<Brand> brandsList = brandService.getActiveBrands();
+		List<BrandResponse> brandResponsesList = brandService.buildBrandsResponseList(brandsList);
+		return new ResponseEntity<List<BrandResponse>>(brandResponsesList, HttpStatus.OK);
 	}
 
 }

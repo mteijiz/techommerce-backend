@@ -19,53 +19,52 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ProductResponse {
 
-	
 	private Long productId;
 	private String productCode;
 	private String productName;
 	private String productDescription;
 	private Float productPrice;
 	private Integer productQuantity;
+	private Float productTotalPoints;
 	private Float productRate;
 	private Integer productQuantityOfVotes;
 	private Brand productBrand;
-	private Category productCategory;
-	private Subcategory productSubcategory;
+	private CategoryWithoutSubcategoriesResponse productCategory;
+	private SubcategoryWithoutCategoryResponse productSubcategory;
 	private Boolean productState;
 	private List<ImageResponse> productImage = new ArrayList<>();
 
-	public ProductResponse(Product product) {
-		// TODO Auto-generated constructor stub
+	public ProductResponse(Product product, List<ImageResponse> imagesResponse) {
 		this.productId = product.getProductId();
 		this.productCode = product.getProductCode();
 		this.productName = product.getProductName();
 		this.productDescription = product.getProductDescription();
 		this.productPrice = product.getProductPrice();
 		this.productQuantity = product.getProductQuantity();
+		this.productTotalPoints = product.getProductTotalPoints();
 		this.productRate = product.getProductRate();
 		this.productQuantityOfVotes = product.getProductQuantityOfVotes();
 		this.productBrand = product.getProductBrand();
-		this.productCategory = product.getProductCategory();
-		Subcategory auxSubcategory = new Subcategory();
-		auxSubcategory.setSubcategoryId(product.getProductSubcategory().getSubcategoryId());
-		auxSubcategory.setSubcategoryCode(product.getProductCode());
-		auxSubcategory.setSubcategoryDescription(product.getProductDescription());
-		auxSubcategory.setSubcategoryName(product.getProductName());
-		auxSubcategory.setSubcategoryState(product.getProductState());
-		this.productSubcategory = auxSubcategory;
-		//this.productImage = buildImageResponseList(product);
+		this.productCategory = new CategoryWithoutSubcategoriesResponse(product.getProductCategory());
+		this.productSubcategory = new SubcategoryWithoutCategoryResponse(product.getProductSubcategory());
 		this.productState = product.getProductState();
+		this.productImage = imagesResponse;
 	}
 
-	private List<ImageResponse> buildImageResponseList(Product productAdded) {
-		// TODO Auto-generated method stub
-		List<ImageResponse> images = new ArrayList<>();
-		for(Image image : productAdded.getProductImages()) {
-			ImageResponse auxImage = new ImageResponse(image);
-			images.add(auxImage);
-		}
-		return images;
-	}
-	
+	public ProductResponse(Product product) {
+		this.productId = product.getProductId();
+		this.productCode = product.getProductCode();
+		this.productName = product.getProductName();
+		this.productDescription = product.getProductDescription();
+		this.productPrice = product.getProductPrice();
+		this.productQuantity = product.getProductQuantity();
+		this.productTotalPoints = product.getProductTotalPoints();
+		this.productRate = product.getProductRate();
+		this.productQuantityOfVotes = product.getProductQuantityOfVotes();
+		this.productBrand = product.getProductBrand();
+		this.productCategory = new CategoryWithoutSubcategoriesResponse(product.getProductCategory());
+		this.productSubcategory = new SubcategoryWithoutCategoryResponse(product.getProductSubcategory());
+		this.productState = product.getProductState();
+	}	
 	
 }

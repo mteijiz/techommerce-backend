@@ -15,14 +15,14 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "cart_products", schema = "ecommerce")
+@Table(name = "purchase_order_details", schema = "ecommerce")
 @Data
 @NoArgsConstructor
-public class CartProduct {
+public class PurchaseOrderDetails {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long cartProductId;
+	private Long purchaseOrderDetailsId;
 	
 	@Column(nullable = false)
 	@NotNull
@@ -44,10 +44,14 @@ public class CartProduct {
 	private Product product;
 	
 	@ManyToOne
-	@JoinColumn(name = "cart_id", nullable = false)
-	private Cart cart;
+	@JoinColumn(name = "purchase_order_id", nullable = false)
+	private PurchaseOrder purchaseOrder;
 	
-	@NotNull
-	private Boolean state;
-	
+	public PurchaseOrderDetails(CartDetails product, PurchaseOrder purchaseOrder) {
+		this.unitPrice = product.getUnitPrice();
+		this.totalPrice = product.getTotalPrice();
+		this.quantity = product.getQuantity();
+		this.product = product.getProduct();
+		this.purchaseOrder = purchaseOrder;
+	}
 }

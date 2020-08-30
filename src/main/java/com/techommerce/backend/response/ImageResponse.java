@@ -17,23 +17,22 @@ public class ImageResponse {
 	private String imageName;
 	private String imageType;
 	private byte[] imageBytes;
+	private Boolean isMainimage;
 	
 	public ImageResponse(Image image) {
-		// TODO Auto-generated constructor stub
 		this.imageId = image.getId();
 		this.imageName = image.getName();
 		this.imageType = image.getType();
 		this.imageBytes = getBytesFromImage(image);
+		this.isMainimage = image.getIsMainImage();
 	}
 
 	private byte[] getBytesFromImage(Image image) {
-		// TODO Auto-generated method stub
 		File imageFile = new File(image.getImagePath());
 		byte[] imageBytes = null;
 		try {
 			imageBytes = Files.readAllBytes(imageFile.toPath());
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return imageBytes;

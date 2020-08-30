@@ -8,7 +8,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -30,44 +29,42 @@ public class Subcategory {
 	private Long subcategoryId;
 
 	@Column(unique = true)
-	@NotNull
-	@Size(min = 1, max = 10)
-	@NotBlank
+	@NotNull(message="El producto tiene que tener un código")
+	@Size(min = 1, max = 10, message="El código del producto tiene que estar entre 1 y 10 caracteres")
+	@NotBlank(message="El código del producto no puede estar en blanco")
 	private String subcategoryCode;
 
 	@Column(unique = true)
-	@NotNull
-	@Size(min = 1, max = 15)
-	@NotBlank
+	@NotNull(message="El producto tiene que tener un nombre")
+	@Size(min = 1, max = 15, message="El nombre del producto tiene que estar entre 1 y 15 caracteres")
+	@NotBlank(message="El nombre del producto no puede estar en blanco")
 	private String subcategoryName;
 
-	@Size(max = 50)
+	@Size(max = 500, message="La descripción del producto tiene que tener menos de 500 caracteres")
 	private String subcategoryDescription;
 
-	@NotNull
+	@NotNull(message="El producto tiene que tener un estado definido")
 	private Boolean subcategoryState;
 
 	@ManyToOne
 	@JoinColumn(name = "category_id", nullable = false)
 	private Category category;
 
-	public Subcategory(@Valid AddSubcategoryRequest subcategoryRequest) {
-		// TODO Auto-generated constructor stub
-		this.subcategoryCode = subcategoryRequest.getSubcategoryCode();
-		this.subcategoryName = subcategoryRequest.getSubcategoryName();
-		this.subcategoryDescription = subcategoryRequest.getSubcategoryDescription();
-		this.subcategoryState = true;
-		this.category = subcategoryRequest.getCategory();
+	public Subcategory(AddSubcategoryRequest request) {
+		this.subcategoryCode = request.getSubcategoryCode();
+		this.subcategoryName = request.getSubcategoryName();
+		this.subcategoryDescription = request.getSubcategoryDescription();
+		this.subcategoryState = request.getSubcategoryState();
+		this.category = request.getCategory();
 	}
 
-	public Subcategory(@Valid UpdateSubcategoryRequest subcategoryRequest) {
-		// TODO Auto-generated constructor stub
-		this.subcategoryCode = subcategoryRequest.getSubcategoryCode();
-		this.subcategoryId = subcategoryRequest.getSubcategoryId();
-		this.subcategoryName = subcategoryRequest.getSubcategoryName();
-		this.subcategoryDescription = subcategoryRequest.getSubcategoryDescription();
-		this.subcategoryState = subcategoryRequest.getSubcategoryState();
-		this.category = subcategoryRequest.getCategory();
+	public Subcategory(UpdateSubcategoryRequest request) {
+		this.subcategoryCode = request.getSubcategoryCode();
+		this.subcategoryId = request.getSubcategoryId();
+		this.subcategoryName = request.getSubcategoryName();
+		this.subcategoryDescription = request.getSubcategoryDescription();
+		this.subcategoryState = request.getSubcategoryState();
+		this.category = request.getCategory();
 	}
 
 }

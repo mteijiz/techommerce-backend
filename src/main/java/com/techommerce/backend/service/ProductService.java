@@ -2,9 +2,13 @@ package com.techommerce.backend.service;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
+import com.techommerce.backend.entity.Brand;
 import com.techommerce.backend.entity.Category;
 import com.techommerce.backend.entity.Product;
 import com.techommerce.backend.entity.Subcategory;
+import com.techommerce.backend.request.AddVoteToProductRequest;
 import com.techommerce.backend.response.ProductResponse;
 
 public interface ProductService {
@@ -23,10 +27,20 @@ public interface ProductService {
 
 	void changingInactiveStateOfProductsBelongToCategory(Category categoryToUpdateState);
 
-	void changingInactiveStateOfProductsBelongToCategory(Subcategory subcategoryToUpdateState);
+	void changingInactiveStateOfProductsBelongToSubcategory(Subcategory subcategoryToUpdateState);
 
-	void changingActiveStateOfProductsBelongToCategory(Subcategory subcategoryToUpdateState);
+	void changingActiveStateOfProductsBelongToSubcategory(Subcategory subcategoryToUpdateState);
 
 	Product searchProductById(Long productId);
+
+	void changingActiveStateOfProductBelongToBrand(Brand brandToChangeStatus);
+
+	void changingInactiveStateOfProductBelongToBrand(Brand brandToChangeStatus);
+
+	List<Product> getActiveProducts();
+
+	Product updateProductRate(@Valid AddVoteToProductRequest voteRequest);
+	
+	ProductResponse buildProductResponse(Product product);
 
 }

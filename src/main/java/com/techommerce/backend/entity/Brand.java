@@ -2,18 +2,13 @@ package com.techommerce.backend.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-
-import org.hibernate.annotations.SQLDelete;
 
 import com.techommerce.backend.request.AddBrandRequest;
 import com.techommerce.backend.request.UpdateBrandRequest;
@@ -25,7 +20,6 @@ import lombok.NoArgsConstructor;
 @Table(name = "brands", schema = "ecommerce")
 @Data
 @NoArgsConstructor
-//@SQLDelete(sql = "UPDATE ecommerce.brands SET brand_state = 'INACTIVE' WHERE brand_id = ?")
 public class Brand {
 
 	@Id
@@ -33,36 +27,36 @@ public class Brand {
 	private Long brandId;
 
 	@Column(unique = true)
-	@NotNull
-	@Size(min = 1, max = 10)
-	@NotBlank
+	@NotNull(message="La marca tiene que tener un código")
+	@Size(min = 1, max = 10, message="El código de la marca tiene que estar entre 1 y 10 caracteres")
+	@NotBlank(message="El código de la marca no puede estar en blanco")
 	private String brandCode;
 
 	@Column(unique = true)
-	@NotNull
-	@Size(min = 1, max = 15)
-	@NotBlank
+	@NotNull(message="La marca tiene que tener un nombre")
+	@Size(min = 1, max = 15, message="El nombre de la marca tiene que estar entre 1 y 15 caracteres")
+	@NotBlank(message="El nombre de la marca no puede estar en blanco")
 	private String brandName;
 
-	@Size(max = 50)
+	@Size(max = 500, message="La descripción de la marca tiene que ser menor de 500 caracteres")
 	private String brandDescription;
 
-	@NotNull
+	@NotNull(message="La marca tiene que tener un estado definido")
 	private Boolean brandState;
 
-	public Brand(@Valid AddBrandRequest brandRequest) {
-		this.brandCode = brandRequest.getBrandCode();
-		this.brandName = brandRequest.getBrandName();
-		this.brandDescription = brandRequest.getBrandDescription();
-		this.brandState = true;
+	public Brand(AddBrandRequest request) {
+		this.brandCode = request.getBrandCode();
+		this.brandName = request.getBrandName();
+		this.brandDescription = request.getBrandDescription();
+		this.brandState = request.getBrandState();
 	}
 
-	public Brand(@Valid UpdateBrandRequest brandRequest) {
-		this.brandId = brandRequest.getBrandId();
-		this.brandCode = brandRequest.getBrandCode();
-		this.brandName = brandRequest.getBrandName();
-		this.brandDescription = brandRequest.getBrandDescription();
-		this.brandState = brandRequest.getBrandState();
+	public Brand(UpdateBrandRequest request) {
+		this.brandId = request.getBrandId();
+		this.brandCode = request.getBrandCode();
+		this.brandName = request.getBrandName();
+		this.brandDescription = request.getBrandDescription();
+		this.brandState = request.getBrandState();
 	}
 
 }

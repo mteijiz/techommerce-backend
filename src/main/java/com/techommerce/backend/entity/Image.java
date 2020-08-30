@@ -42,12 +42,16 @@ public class Image {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "product_id", nullable = false)
 	private Product product;
+	
+	@NotNull
+	private Boolean isMainImage;
 
-	public Image(String originalFilename, String contentType, String path, Product product) {
+	public Image(String originalFilename, String contentType, String path, Product product, Boolean isMainImage) {
 		// TODO Auto-generated constructor stub
 		this.name = originalFilename;
 		this.type = contentType;
 		this.imagePath = path;
 		this.product = product;
+		this.isMainImage = isMainImage;
 	}
 }

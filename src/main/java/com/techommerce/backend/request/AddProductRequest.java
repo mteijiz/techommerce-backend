@@ -16,31 +16,14 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class AddProductRequest {
 
-	@NotNull
-	@NotBlank
-	@Size(min = 1, max = 10)
 	private String productCode;
-	
-	@NotNull
-	@NotBlank
-	@Size(min = 1, max = 15)
 	private String productName;
-
-	@Size(max = 50)
 	private String productDescription;
-
-	@NotNull
-	@Min(0)
 	private Float productPrice;
-
-	@NotNull
-	@Min(0)
 	private Integer productQuantity;
-
-	@NotNull
 	private Brand productBrand;
-	
-	@NotNull
+	private Category category;
 	private Subcategory productSubcategory;
+	private Boolean productState;
 	
 }
