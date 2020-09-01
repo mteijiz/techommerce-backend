@@ -84,8 +84,6 @@ public class ImageController {
 	public ResponseEntity<?> changeMainImage(@RequestBody NewMainImageRequest request){
 		Image image = imageService.searchImageById(request.getImageId());
 		List<Image> images = imageService.searchImagesOfAProduct(request.getProduct());
-		System.out.println(image.getId());
-		System.out.println(images.isEmpty() + " " + images.size());
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 	
