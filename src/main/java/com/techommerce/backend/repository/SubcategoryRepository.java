@@ -12,7 +12,7 @@ public interface SubcategoryRepository extends JpaRepository<Subcategory, Long> 
 
 	List<Subcategory> findByCategory(Category category);
 
-	@Query(value = "select * from ecommerce.subcategories where subcategory_state = true;", nativeQuery = true)
+	@Query(value = "select s from Subcategory s where s.subcategoryState = true")
 	List<Subcategory> findActiveSubcategories();
 
 }

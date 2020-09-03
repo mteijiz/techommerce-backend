@@ -14,16 +14,14 @@ public interface SubcategoryService {
 
 	List<SubcategoryResponse> buildSubcategoryResponseList(List<Subcategory> subcategoriesList);
 
-	//Subcategory updateState(Subcategory subcategoryToUpdateState);
-
 	Subcategory updateSubcategory(Subcategory subcategoryToUpdate);
-
-	//void changingActiveStateOfSubcategoriesBelongToCategory(Category categoryToUpdateState);
-
-	//void changingInactiveStateOfSubcategoriesBelongToCategory(Category categoryToUpdateState);
 
 	List<Subcategory> getSubcategoryByCategory(Category category);
 
 	List<Subcategory> getActiveSubcategories();
+	
+	void subcategoryCodeAndNameToUpperCase(Subcategory subcategory);
+	
+	void checkIfSubcategoryListIsEmpty(List<Subcategory> subcategoriesList);
 
 }

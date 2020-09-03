@@ -9,7 +9,7 @@ import com.techommerce.backend.entity.Brand;
 
 public interface BrandRepository extends JpaRepository<Brand, Long> {
 
-	@Query(value = "select * from ecommerce.brands where brand_state = true", nativeQuery = true)
+	@Query(value = "SELECT b FROM Brand b WHERE b.brandState = true")
 	List<Brand> findActiveBrands();
 
 }

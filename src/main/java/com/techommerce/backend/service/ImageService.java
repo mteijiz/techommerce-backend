@@ -21,8 +21,6 @@ public interface ImageService {
 
 	Image searchImageById(Long imageId);
 
-	void deleteImage(Image imageToUpdate);
-
 	void convertImageListToResponse(ProductResponse auxProductResponse, Product product);
 
 	void uploadMainImages(MultipartFile[] image, Product productToAddimage);
@@ -32,6 +30,19 @@ public interface ImageService {
 	List<Image> getMainImagesOfProduct(Product product);
 
 	List<Image> searchImagesOfAProduct(Product product);
+	
+	void createFolderOfProduct(Product product);
+	
+	void saveImageIntoFolder(MultipartFile image, Product product);
 
-
+	void saveImageInDatabaseAndFolder(Product product, MultipartFile image, Boolean isMainImage);
+	
+	void checkIfMoreThanFourImagesForTheProductAreUploaded(MultipartFile[] images, Product product);
+	
+	void checkIfThereAreNoMainImage(Product product);
+	
+	void deleteImageFromFolder(Image image);
+	
+	void deleteImageFromDatabase(Image image);
+	
 }

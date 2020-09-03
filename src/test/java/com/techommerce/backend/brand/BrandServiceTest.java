@@ -65,8 +65,8 @@ public class BrandServiceTest {
 		brandToAdd.setBrandState(true);
 		when(brandRepository.save(brandToAdd)).thenReturn(brandToAdd);
 		Brand brandAdded = brandService.addBrand(brandToAdd);
-		assertEquals(brandToAdd.getBrandCode().toUpperCase(), brandAdded.getBrandCode());
-		assertEquals(brandToAdd.getBrandName().toUpperCase(), brandAdded.getBrandName());
+		assertEquals(brandToAdd.getBrandCode(), brandAdded.getBrandCode());
+		assertEquals(brandToAdd.getBrandName(), brandAdded.getBrandName());
 		verify(brandRepository, times(1)).save(brandToAdd);
 	}
 
@@ -159,8 +159,8 @@ public class BrandServiceTest {
 		brandToUpdate.setBrandState(true);
 		when(brandRepository.save(brandToUpdate)).thenReturn(brandToUpdate);
 		Brand brandUpdated = brandService.updateBrand(brandToUpdate);
-		assertEquals(brandToUpdate.getBrandCode().toUpperCase(), brandUpdated.getBrandCode());
-		assertEquals(brandToUpdate.getBrandName().toUpperCase(), brandUpdated.getBrandName());
+		assertEquals(brandToUpdate.getBrandCode(), brandUpdated.getBrandCode());
+		assertEquals(brandToUpdate.getBrandName(), brandUpdated.getBrandName());
 		assertEquals(brandToUpdate.getBrandDescription(), brandUpdated.getBrandDescription());
 		assertEquals(brandToUpdate.getBrandState(), brandUpdated.getBrandState());
 		assertEquals(brandToUpdate.getBrandId(), brandUpdated.getBrandId());
@@ -177,8 +177,8 @@ public class BrandServiceTest {
 		brandToUpdate.setBrandState(true);
 		when(brandRepository.save(brandToUpdate)).thenReturn(brandToUpdate);
 		Brand brandUpdated = brandService.updateBrand(brandToUpdate);
-		assertEquals(brandToUpdate.getBrandCode().toUpperCase(), brandUpdated.getBrandCode());
-		assertEquals(brandToUpdate.getBrandName().toUpperCase(), brandUpdated.getBrandName());
+		assertEquals(brandToUpdate.getBrandCode(), brandUpdated.getBrandCode());
+		assertEquals(brandToUpdate.getBrandName(), brandUpdated.getBrandName());
 		verify(brandRepository, times(1)).save(brandToUpdate);
 	}
 

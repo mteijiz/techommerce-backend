@@ -1,6 +1,5 @@
 package com.techommerce.backend.serviceImpl;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -11,7 +10,6 @@ import org.springframework.stereotype.Service;
 import com.techommerce.backend.entity.Category;
 import com.techommerce.backend.exception.AddingCategoryException;
 import com.techommerce.backend.exception.EmptyCategoryListException;
-import com.techommerce.backend.exception.ExistingBrandException;
 import com.techommerce.backend.exception.ExistingCategoryCodeException;
 import com.techommerce.backend.exception.ExistingCategoryNameException;
 import com.techommerce.backend.exception.NotExistingCategoryException;
@@ -19,8 +17,6 @@ import com.techommerce.backend.exception.UpdatingCategoryException;
 import com.techommerce.backend.repository.CategoryRepository;
 import com.techommerce.backend.response.CategoryWithoutSubcategoriesResponse;
 import com.techommerce.backend.service.CategoryService;
-import com.techommerce.backend.service.ProductService;
-import com.techommerce.backend.service.SubcategoryService;
 
 @Service
 public class CategoryServiceImpl implements CategoryService {
@@ -28,15 +24,8 @@ public class CategoryServiceImpl implements CategoryService {
 	@Autowired
 	private CategoryRepository categoryRepository;
 
-	@Autowired
-	private SubcategoryService subcategoryService;
-
-	@Autowired
-	private ProductService productService;
-
 	@Override
 	public Category addCategory(Category categoryToAdd) {
-		categoryCodaAndNameToUpperCase(categoryToAdd);
 		try {
 			Category categoryAdded = categoryRepository.save(categoryToAdd);
 			return categoryAdded;
@@ -63,7 +52,6 @@ public class CategoryServiceImpl implements CategoryService {
 
 	@Override
 	public Category updateCategory(Category categoryToUpdate) {
-		categoryCodaAndNameToUpperCase(categoryToUpdate);
 		try {
 			Category categoryUpdated = categoryRepository.save(categoryToUpdate);
 			return categoryUpdated;
@@ -73,21 +61,6 @@ public class CategoryServiceImpl implements CategoryService {
 			throw new UpdatingCategoryException("Hubo un problema actualizando la categoría", e);
 		}
 	}
-
-//	@Override
-//	public Category updateCategoryState(Category categoryToUpdateState) {
-//		if (categoryToUpdateState.getCategoryState()) {
-//			categoryToUpdateState.setCategoryState(false);
-//			subcategoryService.changingActiveStateOfSubcategoriesBelongToCategory(categoryToUpdateState);
-//			productService.changingActiveStateOfProductsBelongToCategory(categoryToUpdateState);
-//		} else {
-//			categoryToUpdateState.setCategoryState(true);
-//			subcategoryService.changingInactiveStateOfSubcategoriesBelongToCategory(categoryToUpdateState);
-//			productService.changingInactiveStateOfProductsBelongToCategory(categoryToUpdateState);
-//		}
-//		Category categoryUpdated = categoryRepository.save(categoryToUpdateState);
-//		return categoryUpdated;
-//	}
 
 	@Override
 	public Category searchCategoryById(Long categoryId) {
@@ -115,11 +88,13 @@ public class CategoryServiceImpl implements CategoryService {
 					"The category name " + category.getCategoryName() + " already exists", e);
 	}
 
+	@Override
 	public void categoryCodaAndNameToUpperCase(Category category) {
 		category.setCategoryCode(category.getCategoryCode().toUpperCase());
 		category.setCategoryName(category.getCategoryName().toUpperCase());
 	}
 
+	@Override
 	public void checkIfCategoryListIsEmpty(List<Category> categories) {
 		if (categories.isEmpty())
 			throw new EmptyCategoryListException("No hay categorías cargadas");

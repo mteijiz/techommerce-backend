@@ -42,6 +42,7 @@ public class ImageController {
 	public ResponseEntity<?> uploadProductImage(@RequestParam("images") MultipartFile[] images,
 			@PathVariable Long productId) {
 		Product productToAddimage = productService.searchProductById(productId);
+		imageService.checkIfMoreThanFourImagesForTheProductAreUploaded(images, productToAddimage);
 		imageService.uploadImages(images, productToAddimage);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
@@ -50,6 +51,8 @@ public class ImageController {
 	@RolesAllowed("admin")
 	public ResponseEntity<?> uploadMainProductImage(@RequestParam("image") MultipartFile[] image, @PathVariable Long productId){
 		Product productToAddimage = productService.searchProductById(productId);
+		imageService.checkIfMoreThanFourImagesForTheProductAreUploaded(image, productToAddimage);
+		imageService.checkIfThereAreNoMainImage(productToAddimage);
 		imageService.uploadMainImages(image, productToAddimage);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
@@ -76,14 +79,17 @@ public class ImageController {
 	@RolesAllowed("admin")
 	public ResponseEntity<?> updateImageState(@PathVariable Long imageId ){
 		Image imageToUpdate = imageService.searchImageById(imageId);
-		imageService.deleteImage(imageToUpdate);
+		imageService.deleteImageFromDatabase(imageToUpdate);
+		imageService.deleteImageFromFolder(imageToUpdate);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 	
 	@PutMapping("/updateMainImage")
 	public ResponseEntity<?> changeMainImage(@RequestBody NewMainImageRequest request){
-		Image image = imageService.searchImageById(request.getImageId());
-		List<Image> images = imageService.searchImagesOfAProduct(request.getProduct());
+		//estos dos metodos reciben algo, guardarlos en una variable
+		imageService.searchImageById(request.getImageId());
+		imageService.searchImagesOfAProduct(request.getProduct());
+		//agregar logica que busque la imagen main actual cambiarla a false y la otra cambiarla a true
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 	

@@ -12,10 +12,10 @@ public interface ImageRepository extends JpaRepository<Image, Long>{
 
 	List<Image> findByProduct(Product product);
 
-	@Query(value = "select * from ecommerce.product_images pi2 where product_id = ?1 and is_main_image = false", nativeQuery = true)
-	List<Image> findByProductAndIsNotMain(Long productId);
+	@Query(value = "select i from Image i where i.product = ?1 and i.isMainImage = false")
+	List<Image> findByProductAndIsNotMain(Product product);
 	
-	@Query(value = "select * from ecommerce.product_images pi2 where product_id = ?1 and is_main_image = true", nativeQuery = true)
-	List<Image> findByProductAndIsMain(Long productId);
+	@Query(value = "select i from Image i where i.product = ?1 and i.isMainImage = true")
+	List<Image> findByProductAndIsMain(Product product);
 
 }

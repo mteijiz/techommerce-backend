@@ -40,12 +40,14 @@ public class SubcategoryController {
 	@RolesAllowed("admin")
 	public ResponseEntity<?> addSubCategory(@RequestBody AddSubcategoryRequest subcategoryRequest){
 		@Valid Subcategory subcategoryToAdd = new Subcategory(subcategoryRequest);
+		subcategoryService.subcategoryCodeAndNameToUpperCase(subcategoryToAdd);
 		Subcategory subcategoryAdded = subcategoryService.addNewSubcategory(subcategoryToAdd);
 		SubcategoryResponse subcategoryResponse = new SubcategoryResponse(subcategoryAdded);
 		return new ResponseEntity<SubcategoryResponse>(subcategoryResponse, HttpStatus.OK);
 	}
 	
 	@GetMapping("/getAll")
+	@RolesAllowed("admin")
 	public ResponseEntity<?> getAllSubcategories(){
 		List<Subcategory> subcategoriesList = subcategoryService.getAllSubcategories();
 		List<SubcategoryResponse> subcategoriesResponseList = subcategoryService.buildSubcategoryResponseList(subcategoriesList);
@@ -59,15 +61,6 @@ public class SubcategoryController {
 		List<SubcategoryResponse> subcategoryResponsesList = subcategoryService.buildSubcategoryResponseList(subcategoriesList);
 		return new ResponseEntity<List<SubcategoryResponse>>(subcategoryResponsesList, HttpStatus.OK);
 	}
-	
-//	@PutMapping("/updateState")
-//	@RolesAllowed("admin")
-//	public ResponseEntity<?> updateSubcategoryState(@RequestBody UpdateSubcategoryRequest subcategoryRequest){
-//		@Valid Subcategory subcategoryToUpdateState = new Subcategory(subcategoryRequest);
-//		Subcategory subcategoryStateUpdated = subcategoryService.updateState(subcategoryToUpdateState);
-//		SubcategoryResponse subcategoryUpdatedResponse = new SubcategoryResponse(subcategoryStateUpdated);
-//		return new ResponseEntity<SubcategoryResponse>(subcategoryUpdatedResponse, HttpStatus.OK);
-//	}
 	
 	@PutMapping("/update")
 	@RolesAllowed("admin")

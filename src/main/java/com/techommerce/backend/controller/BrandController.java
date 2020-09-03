@@ -37,12 +37,14 @@ public class BrandController {
 	@RolesAllowed("admin")
 	public ResponseEntity<?> add(@RequestBody AddBrandRequest request) {
 		@Valid Brand brandToAdd = new Brand(request);
+		brandService.setBrandCodeAndNameToUppercase(brandToAdd);
 		Brand brandAdded = brandService.addBrand(brandToAdd);
 		BrandResponse brandAddedResponse = new BrandResponse(brandAdded);
 		return new ResponseEntity<BrandResponse>(brandAddedResponse, HttpStatus.OK);
 	}
 
 	@GetMapping("/getAll")
+	@RolesAllowed("admin")
 	public ResponseEntity<?> getAll() {
 		List<Brand> brandsList = brandService.getAllBrands();
 		List<BrandResponse> brandResponsesList = brandService.buildBrandsResponseList(brandsList);
@@ -53,19 +55,11 @@ public class BrandController {
 	@RolesAllowed("admin")
 	public ResponseEntity<?> updateBrand(@RequestBody UpdateBrandRequest request) {
 		@Valid Brand brandToUpdate = new Brand(request);
+		brandService.setBrandCodeAndNameToUppercase(brandToUpdate);
 		Brand brandUpdated = brandService.updateBrand(brandToUpdate);
 		BrandResponse brandUpdatedResponse = new BrandResponse(brandUpdated);
 		return new ResponseEntity<BrandResponse>(brandUpdatedResponse, HttpStatus.OK);
 	}
-
-//	@PutMapping("/changeStatus")
-//	@RolesAllowed("admin")
-//	public ResponseEntity<?> changeStatus(@Valid @RequestBody UpdateBrandRequest brandRequest) {
-//		Brand brandToChangeStatus = new Brand(brandRequest);
-//		Brand brandWithChangedStatus = brandService.changeStatusOfBrand(brandToChangeStatus);
-//		BrandResponse brandChanged = new BrandResponse(brandWithChangedStatus);
-//		return new ResponseEntity<BrandResponse>(brandChanged, HttpStatus.OK);
-//	}
 	
 	@GetMapping("/getActive")
 	public ResponseEntity<?> getActiveBrand() {

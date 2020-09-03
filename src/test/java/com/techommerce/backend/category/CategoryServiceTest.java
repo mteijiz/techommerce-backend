@@ -194,8 +194,8 @@ class CategoryServiceTest {
 		categoryToUpdate.setCategoryName("name");
 		when(categoryRepository.save(categoryToUpdate)).thenReturn(categoryToUpdate);
 		Category categoryUpdated = categoryService.updateCategory(categoryToUpdate);
-		assertEquals("code".toUpperCase(), categoryUpdated.getCategoryCode());
-		assertEquals("name".toUpperCase(), categoryUpdated.getCategoryName());
+		assertEquals("code", categoryUpdated.getCategoryCode());
+		assertEquals("name", categoryUpdated.getCategoryName());
 		verify(categoryRepository, times(1)).save(categoryToUpdate);
 	}
 

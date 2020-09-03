@@ -1,6 +1,5 @@
 package com.techommerce.backend.serviceImpl;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -14,11 +13,9 @@ import com.techommerce.backend.exception.AddingSubcategoryException;
 import com.techommerce.backend.exception.EmptySubcategoryListException;
 import com.techommerce.backend.exception.ExistingCategoryCodeException;
 import com.techommerce.backend.exception.ExistingCategoryNameException;
-import com.techommerce.backend.exception.SubcategoryStateCannotBeChanged;
 import com.techommerce.backend.exception.UpdatingSubcategoryException;
 import com.techommerce.backend.repository.SubcategoryRepository;
 import com.techommerce.backend.response.SubcategoryResponse;
-import com.techommerce.backend.service.ProductService;
 import com.techommerce.backend.service.SubcategoryService;
 
 @Service
@@ -27,12 +24,8 @@ public class SubcategoryServiceImpl implements SubcategoryService {
 	@Autowired
 	private SubcategoryRepository subcategoryRepository;
 
-	@Autowired
-	private ProductService productService;
-
 	@Override
 	public Subcategory addNewSubcategory(Subcategory subcategoryToAdd) {
-		subcategoryCodeAndNameToUpperCase(subcategoryToAdd);
 		try {
 			Subcategory subcategoryAdded = subcategoryRepository.save(subcategoryToAdd);
 			return subcategoryAdded;
@@ -54,30 +47,8 @@ public class SubcategoryServiceImpl implements SubcategoryService {
 		checkIfSubcategoryListIsEmpty(subcategories);
 		List<SubcategoryResponse> subcategoriesResponses = subcategories.stream()
 				.map(subcategory -> new SubcategoryResponse(subcategory)).collect(Collectors.toList());
-//		List<SubcategoryResponse> subcategoryResponsesList = new ArrayList<SubcategoryResponse>();
-//		for (Subcategory subcategory : subcategoriesList) {
-//			SubcategoryResponse auxSubcategory = new SubcategoryResponse(subcategory);
-//			subcategoryResponsesList.add(auxSubcategory);
-//		}
 		return subcategoriesResponses;
 	}
-
-//	@Override
-//	public Subcategory updateState(Subcategory subcategoryToUpdateState) {
-//		if (subcategoryToUpdateState.getSubcategoryState()) {
-//			subcategoryToUpdateState.setSubcategoryState(false);
-//			productService.changingActiveStateOfProductsBelongToSubcategory(subcategoryToUpdateState);
-//		} else if (!subcategoryToUpdateState.getSubcategoryState()
-//				&& subcategoryToUpdateState.getCategory().getCategoryState()) {
-//			subcategoryToUpdateState.setSubcategoryState(true);
-//			productService.changingInactiveStateOfProductsBelongToSubcategory(subcategoryToUpdateState);
-//		} else {
-//			throw new SubcategoryStateCannotBeChanged(
-//					"The subcategory state cannot be chaged. The category of the subcategory has state inactive");
-//		}
-//		Subcategory subcategoryStateUpdated = subcategoryRepository.save(subcategoryToUpdateState);
-//		return subcategoryStateUpdated;
-//	}
 
 	@Override
 	public Subcategory updateSubcategory(Subcategory subcategoryToUpdate) {
@@ -91,26 +62,6 @@ public class SubcategoryServiceImpl implements SubcategoryService {
 			throw new UpdatingSubcategoryException("Hubo un problema actualizando la subcategoría", e);
 		}
 	}
-
-//	@Override
-//	public void changingActiveStateOfSubcategoriesBelongToCategory(Category category) {
-//		List<Subcategory> subcategoryListOfCategory = getSubcategoryByCategory(category);
-//		for (Subcategory subcategory : subcategoryListOfCategory) {
-//			if (subcategory.getSubcategoryState())
-//				subcategory.setSubcategoryState(false);
-//			subcategoryRepository.save(subcategory);
-//		}
-//	}
-//
-//	@Override
-//	public void changingInactiveStateOfSubcategoriesBelongToCategory(Category category) {
-//		List<Subcategory> subcategoryListOfCategory = getSubcategoryByCategory(category);
-//		for (Subcategory subcategory : subcategoryListOfCategory) {
-//			if (!subcategory.getSubcategoryState())
-//				subcategory.setSubcategoryState(true);
-//			subcategoryRepository.save(subcategory);
-//		}
-//	}
 
 	@Override
 	public List<Subcategory> getActiveSubcategories() {
@@ -133,16 +84,19 @@ public class SubcategoryServiceImpl implements SubcategoryService {
 					"The subcategory code " + subcategory.getSubcategoryCode() + " already exists", e);
 	}
 
+	@Override
 	public void subcategoryCodeAndNameToUpperCase(Subcategory subcategory) {
 		subcategory.setSubcategoryCode(subcategory.getSubcategoryCode().toUpperCase());
 		subcategory.setSubcategoryName(subcategory.getSubcategoryName().toUpperCase());
 	}
 
+	@Override
 	public void checkIfSubcategoryListIsEmpty(List<Subcategory> subcategoriesList) {
 		if (subcategoriesList.isEmpty())
 			throw new EmptySubcategoryListException("No hay subcategorías cargadas");
 	}
 
+	@Override
 	public List<Subcategory> getSubcategoryByCategory(Category category) {
 		List<Subcategory> subcategoryListOfCategory = subcategoryRepository.findByCategory(category);
 		return subcategoryListOfCategory;

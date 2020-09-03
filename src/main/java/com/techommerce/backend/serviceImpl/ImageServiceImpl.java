@@ -36,25 +36,24 @@ public class ImageServiceImpl implements ImageService{
 	
 	@Override
 	public void uploadImages(MultipartFile[] images, Product product) {
-		checkIfMoreThanFourImagesForTheProductAreUploaded(images, product);
 		for(MultipartFile image : images) {
+			createFolderOfProduct(product);
 			saveImageIntoFolder(image, product);
 			saveImageInDatabaseAndFolder(product, image, false);
 		}
 	}
 
+	@Override
 	public void saveImageInDatabaseAndFolder(Product product, MultipartFile image, Boolean isMainImage) {
-		//saveImageIntoFolder(image, product);
 		String filePath = Paths.get(imageDirectory, product.getProductCode(), image.getOriginalFilename()).toString();
 		File imageFile = new File(filePath);
 		Image productImageToUpload = new Image(image.getOriginalFilename(), image.getContentType(), imageFile.getPath(), product, isMainImage);
 		imageRepository.save(productImageToUpload);
 	}
 
+	@Override
 	public void saveImageIntoFolder(MultipartFile image, Product product) {
-		String folderOfProduct = imageDirectory + "\\" + product.getProductId();
-		File folderOfProductFile = new File(folderOfProduct);
-		createFolderOfProduct(folderOfProductFile);
+		String folderOfProduct = imageDirectory + "\\" + product.getProductCode();
 		Path filePath = Paths.get(folderOfProduct, image.getOriginalFilename());
 		try {
 			OutputStream os = Files.newOutputStream(filePath);
@@ -65,19 +64,10 @@ public class ImageServiceImpl implements ImageService{
 		}
 	}
 
-//	private byte[] resizeImage(MultipartFile image) throws IOException {
-//		BufferedImage originalImage = ImageIO.read(image.getInputStream());
-//		ByteArrayOutputStream byteOutputStream = new ByteArrayOutputStream();
-//        Thumbnails.of(originalImage)
-//            .size(500, 500)
-//            .outputFormat(image.getContentType())
-//            .outputQuality(0.99)
-//            .toOutputStream(byteOutputStream);
-//        byte[] data = byteOutputStream.toByteArray();
-//		return data;
-//	}
-
-	public void createFolderOfProduct(File folderOfProductFile) {
+	@Override
+	public void createFolderOfProduct(Product product) {
+		String folderOfProduct = imageDirectory + "\\" + product.getProductCode();
+		File folderOfProductFile = new File(folderOfProduct);
 		if(!folderOfProductFile.exists()) {
 			folderOfProductFile.mkdirs();
 		}
@@ -85,17 +75,17 @@ public class ImageServiceImpl implements ImageService{
 
 	@Override
 	public List<Image> getImagesOfProduct(Product product) {
-		List<Image> images = imageRepository.findByProductAndIsNotMain(product.getProductId());
+		List<Image> images = imageRepository.findByProductAndIsNotMain(product);
 		return images;
 	}
 
 	@Override
 	public List<ImageResponse> convertImageList(List<Image> imagesOfProduct) {
 		List<ImageResponse> imageResponses = new ArrayList<>();
-		for(Image image : imagesOfProduct) {
+		imagesOfProduct.stream().forEach(image -> {
 			ImageResponse ir = new ImageResponse(image);
 			imageResponses.add(ir);
-		}
+		});
 		return imageResponses;
 	}
 
@@ -122,17 +112,12 @@ public class ImageServiceImpl implements ImageService{
 	}
 
 	@Override
-	public void deleteImage(Image image) {
-		deleteImageFromDatabase(image);
-		deleteImageFromFolder(image);
-	}
-
 	public void deleteImageFromFolder(Image image) {
 		File imageFile = new File(image.getImagePath());
-		if(!imageFile.delete())
-			System.out.println("deleteImageFromFolder - Hubo un problema borrando la imagen");
+		imageFile.delete();
 	}
 
+	@Override
 	public void deleteImageFromDatabase(Image image) {
 		imageRepository.delete(image);
 	}
@@ -150,14 +135,15 @@ public class ImageServiceImpl implements ImageService{
 
 	@Override
 	public void uploadMainImages(MultipartFile[] images, Product product) {
-		checkIfMoreThanFourImagesForTheProductAreUploaded(images, product);
-		checkIfThereAreNoMainImage(product);
 		for(MultipartFile image : images) {
+			createFolderOfProduct(product);
+			saveImageIntoFolder(image, product);
 			saveImageInDatabaseAndFolder(product, image, true);
 		}
 	}
 	
-	private void checkIfThereAreNoMainImage(Product product) {
+	@Override
+	public void checkIfThereAreNoMainImage(Product product) {
 		List<Image> imageList = imageRepository.findByProduct(product);
 		for(Image image : imageList) {
 			if(image.getIsMainImage())
@@ -165,19 +151,20 @@ public class ImageServiceImpl implements ImageService{
 		}
 	}
 
+	@Override
 	public void checkIfMoreThanFourImagesForTheProductAreUploaded(MultipartFile[] images, Product product) {
 		List<Image> imageList = imageRepository.findByProduct(product);
 		if(images.length + imageList.size() > 4 )
 			throw new TooManyImagesForAProductException("Un producto puede tener solo 4 imagenes y tiene " + imageList.size());
 	}
 
-	public void saveMainImageInDatabaseAndFolder(Product product, MultipartFile image) {
-		saveImageIntoFolder(image, product);
-		String filePath = Paths.get(imageDirectory, image.getOriginalFilename()).toString();
-		File imageFile = new File(filePath);
-		Image productImageToUpload = new Image(image.getOriginalFilename(), image.getContentType(), imageFile.getPath(), product, true);
-		imageRepository.save(productImageToUpload);
-	}
+//	public void saveMainImageInDatabaseAndFolder(Product product, MultipartFile image) {
+//		saveImageIntoFolder(image, product);
+//		String filePath = Paths.get(imageDirectory, image.getOriginalFilename()).toString();
+//		File imageFile = new File(filePath);
+//		Image productImageToUpload = new Image(image.getOriginalFilename(), image.getContentType(), imageFile.getPath(), product, true);
+//		imageRepository.save(productImageToUpload);
+//	}
 	
 	@Override
 	public void checkIfImageListIsEmptyAndGetMissingImagen(List<ImageResponse> imageResponseList) {
@@ -189,7 +176,7 @@ public class ImageServiceImpl implements ImageService{
 
 	@Override
 	public List<Image> getMainImagesOfProduct(Product product) {
-		List<Image> images = imageRepository.findByProductAndIsMain(product.getProductId());
+		List<Image> images = imageRepository.findByProductAndIsMain(product);
 		return images;
 	}
 

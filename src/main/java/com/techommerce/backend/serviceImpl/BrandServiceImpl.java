@@ -1,18 +1,15 @@
 package com.techommerce.backend.serviceImpl;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import com.techommerce.backend.entity.Brand;
 import com.techommerce.backend.exception.EmptyBrandListException;
 import com.techommerce.backend.exception.ExistingBrandException;
-import com.techommerce.backend.exception.NotExistingBrandException;
 import com.techommerce.backend.repository.BrandRepository;
 import com.techommerce.backend.response.BrandResponse;
 import com.techommerce.backend.service.BrandService;
@@ -29,7 +26,6 @@ public class BrandServiceImpl implements BrandService {
 
 	@Override
 	public Brand addBrand(Brand brandToAdd) {
-		setBrandCodeAndNameToUppercase(brandToAdd);
 		try {
 			Brand brandCreated = brandRepository.save(brandToAdd);
 			return brandCreated;
@@ -55,18 +51,8 @@ public class BrandServiceImpl implements BrandService {
 		return brandsResponses;
 	}
 
-//	@Override
-//	public void deleteBrandById(Long brandId) {
-//		try {
-//			brandRepository.deleteById(brandId);
-//		} catch (EmptyResultDataAccessException e) {
-//			throw new NotExistingBrandException(e.getMessage(), e);
-//		}
-//	}
-
 	@Override
 	public Brand updateBrand(Brand brandToUpdate) {
-		setBrandCodeAndNameToUppercase(brandToUpdate);
 		try {
 			Brand brandUpdated = brandRepository.save(brandToUpdate);
 			return brandUpdated;
@@ -77,28 +63,19 @@ public class BrandServiceImpl implements BrandService {
 		} 
 	}
 
-//	@Override
-//	public Brand changeStatusOfBrand(Brand brandToChangeStatus) {
-//		brandToChangeStatus.setBrandState(getOppositeStateOfABrand(brandToChangeStatus));
-//		Brand brandChanged = brandRepository.save(brandToChangeStatus);
-//		return brandChanged;
-//	}
-
-//	public boolean getOppositeStateOfABrand(Brand brandToChangeStatus) {
-//		return !brandToChangeStatus.getBrandState();
-//	}
-
 	@Override
 	public List<Brand> getActiveBrands() {
 		List<Brand> brandsList = brandRepository.findActiveBrands();
 		return brandsList;
 	}
 	
+	@Override
 	public void checkIsBrandListEmpty(List<Brand> brandsList) {
 		if (brandsList.isEmpty())
 			throw new EmptyBrandListException("No hay marcas cargadas");
 	}
 	
+	@Override
 	public void setBrandCodeAndNameToUppercase(Brand brand) {
 		brand.setBrandCode(brand.getBrandCode().toUpperCase());
 		brand.setBrandName(brand.getBrandName().toUpperCase());

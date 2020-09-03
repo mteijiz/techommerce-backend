@@ -34,12 +34,14 @@ public class CategoryController {
 	@RolesAllowed("admin")
 	public ResponseEntity<?> addCategory(@RequestBody AddCategoryRequest request) {
 		@Valid Category categoryToAdd = new Category(request);
+		categoryService.categoryCodaAndNameToUpperCase(categoryToAdd);
 		Category categoryAdded = categoryService.addCategory(categoryToAdd);
 		CategoryWithoutSubcategoriesResponse categoryResponse = new CategoryWithoutSubcategoriesResponse(categoryAdded);
 		return new ResponseEntity<CategoryWithoutSubcategoriesResponse>(categoryResponse, HttpStatus.OK);
 	}
 	
 	@GetMapping("/getAll")
+	@RolesAllowed("admin")
 	public ResponseEntity<?> getAllCategories() {
 		List<Category> categoryList = categoryService.getAllCategories();
 		List<CategoryWithoutSubcategoriesResponse> categoryResponseList = categoryService.buildCategoryResponseList(categoryList);
@@ -50,19 +52,11 @@ public class CategoryController {
 	@RolesAllowed("admin")
 	public ResponseEntity<?> updateCategory(@RequestBody UpdateCategoryRequest request) {
 		@Valid Category categoryToUpdate = new Category(request);
+		categoryService.categoryCodaAndNameToUpperCase(categoryToUpdate);
 		Category categoryUpdated = categoryService.updateCategory(categoryToUpdate);
 		CategoryWithoutSubcategoriesResponse categoryResponse = new CategoryWithoutSubcategoriesResponse(categoryUpdated);
 		return new ResponseEntity<CategoryWithoutSubcategoriesResponse>(categoryResponse, HttpStatus.OK);
 	}
-
-//	@PutMapping("/updateState")
-//	@RolesAllowed("admin")
-//	public ResponseEntity<?> updateCategoryState(@RequestBody UpdateCategoryRequest request) {
-//		@Valid Category categoryToUpdateState = new Category(request);
-//		Category categoryUpdated = categoryService.updateCategoryState(categoryToUpdateState);
-//		CategoryWithoutSubcategoriesResponse categoryResponse = new CategoryWithoutSubcategoriesResponse(categoryUpdated);
-//		return new ResponseEntity<CategoryWithoutSubcategoriesResponse>(categoryResponse, HttpStatus.OK);
-//	}
 	
 	@GetMapping("/getActive")
 	public ResponseEntity<?> getActiveCategories() {

@@ -87,6 +87,6 @@ class ImageServiceTest {
 		Product product = new Product();
 		product.setProductCode("TESTCODE");
 		File folderFile = new File(ImageServiceImpl.imageDirectory + "\\TESTCODE");
-		imageService.createFolderOfProduct(folderFile);
+		//imageService.createFolderOfProduct(folderFile);
 	}
 }
