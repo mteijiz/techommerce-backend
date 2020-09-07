@@ -57,7 +57,6 @@ public class CartDetails {
 	private Boolean state;
 	
 	public CartDetails(Product product, Cart cart) {
-		// TODO Auto-generated constructor stub
 		this.unitPrice = product.getProductPrice();
 		this.quantity = new Integer(1);
 		this.totalPrice = new Float(product.getProductPrice() * 1);
@@ -83,5 +82,6 @@ public class CartDetails {
 		this.state = true;
 	}
 
+	
 	
 }

@@ -16,7 +16,6 @@ import com.techommerce.backend.exception.EmptyOrderListException;
 import com.techommerce.backend.repository.CartDetailsRepository;
 import com.techommerce.backend.repository.PurchaseOrderDetailsRepository;
 import com.techommerce.backend.repository.PurchaseOrderRepository;
-import com.techommerce.backend.request.PaymentMethodRequest;
 import com.techommerce.backend.response.PurchaseOrderResponse;
 import com.techommerce.backend.response.PurchaseOrderDetailsResponse;
 import com.techommerce.backend.service.CartService;
@@ -52,8 +51,8 @@ public class PurchaseOrderServiceImpl implements PurchaseOrderService{
 	}
 
 	@Override
-	public PurchaseOrder createOrder(PaymentMethodRequest request, Cart cart) {
-		PurchaseOrder order = new PurchaseOrder(cart, request);
+	public PurchaseOrder createOrder(Cart cart) {
+		PurchaseOrder order = new PurchaseOrder(cart);
 		PurchaseOrder orderSaved = purchaseOrderRepository.save(order);
 		return orderSaved;
 	}

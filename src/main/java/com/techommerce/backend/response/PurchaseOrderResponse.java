@@ -19,7 +19,6 @@ public class PurchaseOrderResponse {
 	private Float total;
 	private Integer quantity;
 	private String purchaseDate;
-	private String ccNumberFourLastDigits;
 	private List<PurchaseOrderDetailsResponse> orderDetails = new ArrayList<>();
 	
 	public PurchaseOrderResponse(PurchaseOrder order) {
@@ -29,7 +28,6 @@ public class PurchaseOrderResponse {
 		this.quantity = order.getQuantity();
 		SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy");
 		this.purchaseDate = format.format(order.getPurchaseDate());
-		this.ccNumberFourLastDigits = order.getCcNumber().substring(order.getCcNumber().length()-4);
 	}
 	
 	public PurchaseOrderResponse(PurchaseOrder order, List<PurchaseOrderDetailsResponse> orderDetailsResponse) {
@@ -39,7 +37,6 @@ public class PurchaseOrderResponse {
 		this.quantity = order.getQuantity();
 		SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy");
 		this.purchaseDate = format.format(order.getPurchaseDate());
-		this.ccNumberFourLastDigits = order.getCcNumber().substring(order.getCcNumber().length()-4);
 		this.orderDetails = orderDetailsResponse;
 	}
 }

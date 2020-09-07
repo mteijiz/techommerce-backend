@@ -38,7 +38,7 @@ public class Cart {
 	@Min(0)
 	private Integer quantityOfProduct;
 	
-	@OneToMany(mappedBy = "cart", cascade = CascadeType.PERSIST, fetch=FetchType.LAZY)
+	@OneToMany(mappedBy = "cart", cascade = CascadeType.PERSIST)
 	private List<CartDetails> cartDetails = new ArrayList<>();
 	
 	public Cart(String id) {

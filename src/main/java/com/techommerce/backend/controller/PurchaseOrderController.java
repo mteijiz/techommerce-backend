@@ -21,13 +21,15 @@ import com.techommerce.backend.entity.CartDetails;
 import com.techommerce.backend.entity.PurchaseOrder;
 import com.techommerce.backend.entity.PurchaseOrderDetails;
 import com.techommerce.backend.request.CartRequest;
-import com.techommerce.backend.request.PaymentMethodRequest;
 import com.techommerce.backend.request.PurchaseOrderRequest;
 import com.techommerce.backend.response.PurchaseOrderResponse;
 import com.techommerce.backend.response.PurchaseOrderDetailsResponse;
 import com.techommerce.backend.service.CartService;
 import com.techommerce.backend.service.KeycloakService;
+import com.techommerce.backend.service.ProductService;
 import com.techommerce.backend.service.PurchaseOrderService;
+
+import ch.qos.logback.classic.net.SyslogAppender;
 
 
 @RestController
@@ -44,13 +46,17 @@ public class PurchaseOrderController {
 	@Autowired
 	private KeycloakService keycloakService;
 	
-	@PostMapping("/add")
+	@Autowired
+	private ProductService productService;
+	
+	@GetMapping("/add")
 	@RolesAllowed("user")
-	public ResponseEntity<?> addPurchaseOfAUser(@RequestBody PaymentMethodRequest request) {
+	public ResponseEntity<?> addPurchaseOfAUser() {
 		KeycloakPrincipal<KeycloakSecurityContext> keycloakToken = keycloakService.getJwtToken();
 		Cart cart = cartService.getCartOfUser(keycloakToken.getName());
-		PurchaseOrder purchaseOrder = purchaseOrderService.createOrder(request, cart);
 		List<CartDetails> cartDetailsList = cartService.getAllProductsOfACart(cart);
+		productService.substractProductQuantity(cartDetailsList);
+		PurchaseOrder purchaseOrder = purchaseOrderService.createOrder(cart);
 		cartService.deleteProductsOfAUser(cart);
 		List<PurchaseOrderDetails> orderDetails = purchaseOrderService.setPurchaseOrderDetails(cartDetailsList, purchaseOrder);
 		List<PurchaseOrderDetails> addedPurchaseProducts = purchaseOrderService.purchaseProducts(orderDetails);

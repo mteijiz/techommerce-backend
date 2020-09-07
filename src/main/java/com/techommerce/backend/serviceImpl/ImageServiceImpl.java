@@ -11,6 +11,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.techommerce.backend.entity.Image;
@@ -184,6 +185,24 @@ public class ImageServiceImpl implements ImageService{
 	public List<Image> searchImagesOfAProduct(Product product) {
 		List<Image> images = imageRepository.findByProduct(product);
 		return images;
+	}
+
+	@Override
+	public void setNewMainImage(Image newMainImage, List<Image> images) {
+		images.stream().forEach(image -> {
+			if(image.getId().equals(newMainImage.getId())) {
+				image.setIsMainImage(true);
+			}
+			imageRepository.save(image);
+		});
+	}
+
+	@Override
+	public void ifThereIsMainImageChangesItToSecondaryImage(List<Image> images) {
+		images.stream().forEach(image -> {
+			if(image.getIsMainImage())
+				image.setIsMainImage(false);
+		});
 	}
 
 }

@@ -4,11 +4,9 @@ import java.util.List;
 
 import com.techommerce.backend.entity.Cart;
 import com.techommerce.backend.entity.CartDetails;
-import com.techommerce.backend.entity.PurchaseOrderDetails;
 import com.techommerce.backend.request.UpdateQuantityOfProductInACartRequest;
 import com.techommerce.backend.response.CartDetailResponse;
 import com.techommerce.backend.response.CartResponse;
-import com.techommerce.backend.response.PurchaseOrderDetailsResponse;
 
 public interface CartService {
 
@@ -28,6 +26,18 @@ public interface CartService {
 
 	CartResponse buildCartResponse(Cart cart);
 
-	void updateCartAndDetail(Cart cart, UpdateQuantityOfProductInACartRequest request);
+	void updateCart(Cart cart);
+	
+	void updateDetail(CartDetails cartDetail, CartDetails detail);
+	
+	void updateCart(Cart cart, CartDetails detail);
+	
+	void substractQuantityFromCart(Long cartProductId);
+	
+	CartDetails updateCartDetail(UpdateQuantityOfProductInACartRequest request);
+	
+	void updateCartTotals(Cart cart, CartDetails detail);
+	
+	void checkIfCartHasDetails(Cart cart);
 	
 }

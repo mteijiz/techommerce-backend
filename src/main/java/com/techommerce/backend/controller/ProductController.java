@@ -42,6 +42,7 @@ public class ProductController {
 	}
 	
 	@GetMapping("/getAll")
+	@RolesAllowed("admin")
 	public ResponseEntity<?> getAllProducts(){
 		List<Product> productsList = productService.getAllProducts();
 		List<ProductResponse> productsResponseList = productService.buildProductResponseList(productsList);
@@ -55,30 +56,32 @@ public class ProductController {
 		return new ResponseEntity<List<ProductResponse>>(productsResponseList, HttpStatus.OK);
 	}
 	
-	@PutMapping("/updateState")
-	@RolesAllowed("admin")
-	public ResponseEntity<?> updateProductState(@Valid @RequestBody UpdateProductRequest productRequest){
-		Product productToUpdate = new Product(productRequest);
-		Product productUpdated = productService.updateProductState(productToUpdate);
-		ProductResponse productUpdatedResponse = new ProductResponse(productUpdated);
-		return new ResponseEntity<ProductResponse>(productUpdatedResponse, HttpStatus.OK);
-	}
+//	@PutMapping("/updateState")
+//	@RolesAllowed("admin")
+//	public ResponseEntity<?> updateProductState(@Valid @RequestBody UpdateProductRequest productRequest){
+//		@Valid Product productToUpdate = new Product(productRequest);
+//		Product productUpdated = productService.updateProductState(productToUpdate);
+//		ProductResponse productUpdatedResponse = new ProductResponse(productUpdated);
+//		return new ResponseEntity<ProductResponse>(productUpdatedResponse, HttpStatus.OK);
+//	}
 	
 	@PutMapping("/update")
 	@RolesAllowed("admin")
 	public ResponseEntity<?> updateProduct(@RequestBody UpdateProductRequest productRequest){
 		@Valid Product productToUpdate = new Product(productRequest);
+		productService.addOrSubstractQuantityFromProduct(productToUpdate);
+		productService.checkIfProductQuantityIsLowerThanZero(productToUpdate);
 		Product productUpdated = productService.updateProduct(productToUpdate);
 		ProductResponse productUpdatedResponse = new ProductResponse(productUpdated);
 		return new ResponseEntity<ProductResponse>(productUpdatedResponse, HttpStatus.OK);
 	}
 	
-	@PutMapping("/addVote")
-	public ResponseEntity<?> addVoteToProduct(@RequestBody @Valid AddVoteToProductRequest voteRequest){
-		Product product = productService.updateProductRate(voteRequest);
-		ProductResponse productResponse = new ProductResponse(product);
-		return new ResponseEntity<ProductResponse>(productResponse, HttpStatus.OK);
-	}
+//	@PutMapping("/addVote")
+//	public ResponseEntity<?> addVoteToProduct(@RequestBody @Valid AddVoteToProductRequest voteRequest){
+//		Product product = productService.updateProductRate(voteRequest);
+//		ProductResponse productResponse = new ProductResponse(product);
+//		return new ResponseEntity<ProductResponse>(productResponse, HttpStatus.OK);
+//	}
 	
 	@GetMapping("/getById/{productId}")
 	public ResponseEntity<?> getProductById(@PathVariable Long productId){

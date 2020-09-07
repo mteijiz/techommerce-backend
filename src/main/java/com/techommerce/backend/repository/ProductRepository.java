@@ -18,7 +18,7 @@ public interface ProductRepository extends JpaRepository<Product, Long>{
 
 	List<Product> findByProductBrand(Brand brand);
 
-	@Query(value = "select * from ecommerce.products where product_state = true",  nativeQuery = true)
+	@Query(value = "select p from Product p where p.productState = true")
 	List<Product> findAllByStatus();
 
 

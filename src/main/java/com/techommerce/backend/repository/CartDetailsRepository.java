@@ -16,8 +16,8 @@ public interface CartDetailsRepository extends JpaRepository<CartDetails, Long>{
 	@Query(value="select * from ecommerce.cart_details cp where product_id = ?1 and user_id = ?2", nativeQuery=true)
 	CartDetails findByProductAndUser(Long productId, String userId);
 
-	@Query(value="select * from ecommerce.cart_details cp where user_id = ?1 and state = true", nativeQuery=true)
-	List<CartDetails> findByCartAndState(String userId);
+	@Query(value="select c from CartDetails c where c.cart = ?1 and c.state = true")
+	List<CartDetails> findByCartAndState(Cart cart);
 
 	@Query(value="delete from ecommerce.cart_details cp where user_id = ?1", nativeQuery=true)
 	void deleteWithUserId(String userId);

@@ -3,6 +3,7 @@ package com.techommerce.backend.controller;
 import java.util.List;
 
 import javax.annotation.security.RolesAllowed;
+import javax.persistence.EntityManager;
 import javax.validation.Valid;
 
 import org.keycloak.KeycloakPrincipal;
@@ -44,24 +45,24 @@ public class CartController {
 	
 	@PostMapping("/addWithQuantity")
 	@RolesAllowed("user")
-	public ResponseEntity<?> addToCartWithQuantity(@RequestBody @Valid AddProductWithQuantityToCartRequest cartDetails){
+	public ResponseEntity<?> addToCartWithQuantity(@RequestBody AddProductWithQuantityToCartRequest cartDetails){
 		KeycloakPrincipal<KeycloakSecurityContext> keycloakToken = keycloakService.getJwtToken();
 		Cart cart = cartService.getCartOfUser(keycloakToken.getName());
-		CartDetails detail = new CartDetails(cartDetails);
+		@Valid CartDetails detail = new CartDetails(cartDetails);
 		Cart updatedCart = cartService.addProductDetailToCart(cart, detail);
-		//CartDetailResponse cartProductResponse = new CartDetailResponse(cartProductAdded);
-		return new ResponseEntity<>(HttpStatus.OK);
+		CartResponse cartResponse = cartService.buildCartResponse(updatedCart);
+		return new ResponseEntity<CartResponse>(cartResponse, HttpStatus.OK);
 	}
 	
-	@GetMapping("/getDetails")
-	@RolesAllowed("user")
-	public ResponseEntity<?> getCartDetails(){
-		KeycloakPrincipal<KeycloakSecurityContext> keycloakToken = keycloakService.getJwtToken();
-		Cart cart = cartService.getCartOfUser(keycloakToken.getName());
-		List<CartDetails> cartProductsList = cartService.getAllProductsOfACart(cart);
-		List<CartDetailResponse> cartProductResponseList = cartService.buildCartProductResponseList(cartProductsList);
-		return new ResponseEntity<List<CartDetailResponse>>(cartProductResponseList, HttpStatus.OK);
-	}
+//	@GetMapping("/getDetails")
+//	@RolesAllowed("user")
+//	public ResponseEntity<?> getCartDetails(){
+//		KeycloakPrincipal<KeycloakSecurityContext> keycloakToken = keycloakService.getJwtToken();
+//		Cart cart = cartService.getCartOfUser(keycloakToken.getName());
+//		List<CartDetails> cartProductsList = cartService.getAllProductsOfACart(cart);
+//		List<CartDetailResponse> cartProductResponseList = cartService.buildCartProductResponseList(cartProductsList);
+//		return new ResponseEntity<List<CartDetailResponse>>(cartProductResponseList, HttpStatus.OK);
+//	}
 	
 	@GetMapping("/get")
 	@RolesAllowed("user")
@@ -75,6 +76,7 @@ public class CartController {
 	@DeleteMapping("/deleteFromCart/{cartProductId}")
 	@RolesAllowed("user")
 	public ResponseEntity<?> deleteFromCart(@PathVariable Long cartProductId){
+		cartService.substractQuantityFromCart(cartProductId);
 		cartService.deleteCartProduct(cartProductId);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
@@ -82,11 +84,11 @@ public class CartController {
 	@PutMapping("updateQuantityOfAProductInACart")
 	@RolesAllowed("user")
 	public ResponseEntity<?> updateQuantityOfAProductInACart(@RequestBody UpdateQuantityOfProductInACartRequest request){
-		System.out.println(request.getCartDetail().getCartDetailId());
-		System.out.println(request.getNewQuantity());
 		KeycloakPrincipal<KeycloakSecurityContext> keycloakToken = keycloakService.getJwtToken();
 		Cart cart = cartService.getCartOfUser(keycloakToken.getName());
-		cartService.updateCartAndDetail(cart, request);
+		CartDetails detail = cartService.updateCartDetail(request);
+		cartService.updateCartTotals(cart, detail);
+		cartService.updateCart(cart);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 	

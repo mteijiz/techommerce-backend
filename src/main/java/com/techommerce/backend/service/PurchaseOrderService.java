@@ -8,7 +8,6 @@ import com.techommerce.backend.entity.Cart;
 import com.techommerce.backend.entity.CartDetails;
 import com.techommerce.backend.entity.PurchaseOrder;
 import com.techommerce.backend.entity.PurchaseOrderDetails;
-import com.techommerce.backend.request.PaymentMethodRequest;
 
 public interface PurchaseOrderService {
 
@@ -16,7 +15,7 @@ public interface PurchaseOrderService {
 
 	List<PurchaseOrderDetailsResponse> buildPurchaseOrderDetailsResponseList(List<PurchaseOrderDetails> orderDetails);
 
-	PurchaseOrder createOrder(PaymentMethodRequest request, Cart cart);
+	PurchaseOrder createOrder(Cart cart);
 
 	List<PurchaseOrderDetails> setPurchaseOrderDetails(List<CartDetails> cartDetailsList, PurchaseOrder purchaseOrder);
 

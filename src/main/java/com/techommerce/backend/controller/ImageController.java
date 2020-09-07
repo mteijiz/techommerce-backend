@@ -86,10 +86,10 @@ public class ImageController {
 	
 	@PutMapping("/updateMainImage")
 	public ResponseEntity<?> changeMainImage(@RequestBody NewMainImageRequest request){
-		//estos dos metodos reciben algo, guardarlos en una variable
-		imageService.searchImageById(request.getImageId());
-		imageService.searchImagesOfAProduct(request.getProduct());
-		//agregar logica que busque la imagen main actual cambiarla a false y la otra cambiarla a true
+		Image newMainImage = imageService.searchImageById(request.getImageId());
+		List<Image> images = imageService.searchImagesOfAProduct(request.getProduct());
+		imageService.ifThereIsMainImageChangesItToSecondaryImage(images);
+		imageService.setNewMainImage(newMainImage, images);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 	

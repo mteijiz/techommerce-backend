@@ -44,5 +44,9 @@ public interface ImageService {
 	void deleteImageFromFolder(Image image);
 	
 	void deleteImageFromDatabase(Image image);
+
+	void setNewMainImage(Image image, List<Image> images);
+
+	void ifThereIsMainImageChangesItToSecondaryImage(List<Image> images);
 	
 }

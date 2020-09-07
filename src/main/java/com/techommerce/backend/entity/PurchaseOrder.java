@@ -17,7 +17,6 @@ import javax.persistence.Table;
 import javax.validation.constraints.Min;
 
 import com.sun.istack.NotNull;
-import com.techommerce.backend.request.PaymentMethodRequest;
 import com.techommerce.backend.request.PurchaseOrderRequest;
 
 import lombok.Data;
@@ -48,18 +47,14 @@ public class PurchaseOrder {
 	@NotNull
 	private Date purchaseDate;
 	
-	@NotNull
-	private String ccNumber;
-	
 	@OneToMany(mappedBy = "purchaseOrder", cascade = CascadeType.PERSIST, fetch=FetchType.LAZY)
 	private List<PurchaseOrderDetails> details = new ArrayList<>();
 	
-	public PurchaseOrder(Cart cart, PaymentMethodRequest request) {
+	public PurchaseOrder(Cart cart) {
 		this.userId = cart.getUserId();
 		this.total = cart.getTotalAmount();
 		this.quantity = cart.getQuantityOfProduct();  
 		this.purchaseDate = new Date();
-		this.ccNumber = request.getCcNumber();
 	}
 
 	public PurchaseOrder(PurchaseOrderRequest orderRequest) {
