@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.techommerce.backend.entity.Product;
 import com.techommerce.backend.request.AddProductRequest;
-import com.techommerce.backend.request.AddVoteToProductRequest;
 import com.techommerce.backend.request.UpdateProductRequest;
 import com.techommerce.backend.response.ProductResponse;
 import com.techommerce.backend.service.ProductService;
