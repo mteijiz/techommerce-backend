@@ -15,18 +15,18 @@ public class PurchaseOrderDetailsResponse {
 	private Integer quantity;
 	private ProductResponse product;
 	
-	public PurchaseOrderDetailsResponse(PurchaseOrderDetails orderDetail) {
-		this.purchaseOrderDetailsId = orderDetail.getPurchaseOrderDetailsId();
-		this.unitPrice = orderDetail.getUnitPrice();
-		this.totalPrice = orderDetail.getTotalPrice();
-		this.product = new ProductResponse(orderDetail.getProduct());
-		this.quantity = orderDetail.getQuantity();
+	public PurchaseOrderDetailsResponse(PurchaseOrderDetails detail) {
+		this.purchaseOrderDetailsId = detail.getPurchaseOrderDetailsId();
+		this.unitPrice = (float) ((float) Math.round(detail.getUnitPrice() * 100.0)/100.0);
+		this.totalPrice = (float) ((float) Math.round(detail.getTotalPrice() * 100.0)/100.0);
+		this.product = new ProductResponse(detail.getProduct());
+		this.quantity = detail.getQuantity();
 	}
 
 	public PurchaseOrderDetailsResponse(PurchaseOrderDetails detail, ProductResponse product) {
 		this.purchaseOrderDetailsId = detail.getPurchaseOrderDetailsId();
-		this.unitPrice = detail.getUnitPrice();
-		this.totalPrice = detail.getTotalPrice();
+		this.unitPrice = (float) ((float) Math.round(detail.getUnitPrice() * 100.0)/100.0);
+		this.totalPrice = (float) ((float) Math.round(detail.getTotalPrice() * 100.0)/100.0);
 		this.product = product;
 		this.quantity = detail.getQuantity();
 	}

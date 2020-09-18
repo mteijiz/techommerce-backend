@@ -24,7 +24,7 @@ public class PurchaseOrderResponse {
 	public PurchaseOrderResponse(PurchaseOrder order) {
 		this.purchaseOrderId = order.getPurchaseOrderId();
 		this.userId = order.getUserId();
-		this.total = order.getTotal();
+		this.total = (float) ((float) Math.round(order.getTotal() * 100.0)/100.0);
 		this.quantity = order.getQuantity();
 		SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy");
 		this.purchaseDate = format.format(order.getPurchaseDate());
@@ -33,7 +33,7 @@ public class PurchaseOrderResponse {
 	public PurchaseOrderResponse(PurchaseOrder order, List<PurchaseOrderDetailsResponse> orderDetailsResponse) {
 		this.purchaseOrderId = order.getPurchaseOrderId();
 		this.userId = order.getUserId();
-		this.total = order.getTotal();
+		this.total = (float) ((float) Math.round(order.getTotal() * 100.0)/100.0);;
 		this.quantity = order.getQuantity();
 		SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy");
 		this.purchaseDate = format.format(order.getPurchaseDate());

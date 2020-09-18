@@ -11,7 +11,7 @@ import com.techommerce.backend.entity.PurchaseOrderDetails;
 
 public interface PurchaseOrderDetailsRepository extends JpaRepository<PurchaseOrderDetails, Long>{
 
-	@Query(value = "select * from ecommerce.purchase_order_details where purchase_order_id = ?1", nativeQuery = true)
-	List<PurchaseOrderDetails> findAllByOrder(Long purchaseOrderId);
+	@Query(value = "select p from PurchaseOrderDetails p where p.purchaseOrder = ?1", nativeQuery = true)
+	List<PurchaseOrderDetails> findAllByOrder(PurchaseOrder order);
 
 }

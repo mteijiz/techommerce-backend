@@ -34,7 +34,7 @@ import com.techommerce.backend.service.KeycloakService;
 
 @RestController
 @RequestMapping("carts")
-@CrossOrigin(origins = "${spring.frontend.url}")
+@CrossOrigin(origins = "http://localhost:4200")
 public class CartController {
 
 	@Autowired
@@ -76,8 +76,9 @@ public class CartController {
 	@DeleteMapping("/deleteFromCart/{cartProductId}")
 	@RolesAllowed("user")
 	public ResponseEntity<?> deleteFromCart(@PathVariable Long cartProductId){
-		cartService.substractQuantityFromCart(cartProductId);
+		CartDetails detail = cartService.getCartDetailById(cartProductId); 
 		cartService.deleteCartProduct(cartProductId);
+		cartService.substractQuantityFromCart(detail);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 	

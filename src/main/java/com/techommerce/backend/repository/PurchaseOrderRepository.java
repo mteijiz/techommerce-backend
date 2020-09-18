@@ -10,7 +10,7 @@ import com.techommerce.backend.entity.PurchaseOrder;
 
 public interface PurchaseOrderRepository extends JpaRepository<PurchaseOrder, Long>{
 
-	@Query(value = "select * from ecommerce.purchase_order where user_id = ?1", nativeQuery = true)
+	@Query(value = "select p from PurchaseOrder p where p.userId = ?1")
 	List<PurchaseOrder> findAllByUserId(String userId);
 
 }

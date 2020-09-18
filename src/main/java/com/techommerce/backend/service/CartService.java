@@ -32,12 +32,16 @@ public interface CartService {
 	
 	void updateCart(Cart cart, CartDetails detail);
 	
-	void substractQuantityFromCart(Long cartProductId);
+	void updateCartWithExistingProduct(Cart cart, CartDetails detail, CartDetails actualDetail);
+	
+	void substractQuantityFromCart(CartDetails detail);
 	
 	CartDetails updateCartDetail(UpdateQuantityOfProductInACartRequest request);
 	
 	void updateCartTotals(Cart cart, CartDetails detail);
 	
 	void checkIfCartHasDetails(Cart cart);
+	
+	CartDetails getCartDetailById(Long cartProductId);
 	
 }

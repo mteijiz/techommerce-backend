@@ -27,7 +27,7 @@ import com.techommerce.backend.service.BrandService;
 
 @RestController
 @RequestMapping("brands")
-@CrossOrigin(origins = "${spring.frontend.url}")
+@CrossOrigin(origins = "http://localhost:4200")
 public class BrandController {
 
 	@Autowired

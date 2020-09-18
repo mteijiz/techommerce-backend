@@ -28,7 +28,7 @@ import com.techommerce.backend.service.ProductService;
 
 @Controller
 @RequestMapping("images")
-@CrossOrigin(origins = "${spring.frontend.url}")
+@CrossOrigin(origins = "http://localhost:4200")
 public class ImageController {
 
 	@Autowired

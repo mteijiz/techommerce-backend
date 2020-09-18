@@ -80,7 +80,7 @@ public class PurchaseOrderServiceImpl implements PurchaseOrderService{
 
 	@Override
 	public List<PurchaseOrderDetails> getOrderDetaislOfAUser(PurchaseOrder order) {
-		List<PurchaseOrderDetails> detailsOfAnOrder = purchaseOrderDetailsRepository.findAllByOrder(order.getPurchaseOrderId());
+		List<PurchaseOrderDetails> detailsOfAnOrder = purchaseOrderDetailsRepository.findAllByOrder(order);
 		return detailsOfAnOrder;
 	}
 

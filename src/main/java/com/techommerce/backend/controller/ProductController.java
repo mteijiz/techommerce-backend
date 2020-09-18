@@ -25,7 +25,7 @@ import com.techommerce.backend.service.ProductService;
 
 @RestController
 @RequestMapping("products")
-@CrossOrigin(origins = "${spring.frontend.url}")
+@CrossOrigin(origins = "http://localhost:4200")
 public class ProductController {
 
 	@Autowired

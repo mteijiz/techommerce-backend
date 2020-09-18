@@ -24,7 +24,7 @@ import com.techommerce.backend.service.CategoryService;
 
 @RestController
 @RequestMapping("categories")
-@CrossOrigin(origins = "${spring.frontend.url}")
+@CrossOrigin(origins = "http://localhost:4200")
 public class CategoryController {
 
 	@Autowired

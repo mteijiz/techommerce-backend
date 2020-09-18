@@ -34,7 +34,7 @@ import ch.qos.logback.classic.net.SyslogAppender;
 
 @RestController
 @RequestMapping("purchase")
-@CrossOrigin(origins = "${spring.frontend.url}")
+@CrossOrigin(origins = "http://localhost:4200")
 public class PurchaseOrderController {
 
 	@Autowired

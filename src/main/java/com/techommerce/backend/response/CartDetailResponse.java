@@ -19,18 +19,18 @@ public class CartDetailResponse {
 	
 	public CartDetailResponse(CartDetails cartDetails, ProductResponse productResponse) {
 		this.cartDetailId = cartDetails.getCartDetailId();
-		this.unitPrice = cartDetails.getUnitPrice();
+		this.unitPrice = (float) ((float) Math.round(cartDetails.getUnitPrice() * 100.0)/100.0);
 		this.quantity = cartDetails.getQuantity();
-		this.totalPrice = cartDetails.getTotalPrice();
+		this.totalPrice = (float) ((float) Math.round(cartDetails.getTotalPrice() * 100.0)/100.0);
 		this.product = productResponse;
 		this.state = cartDetails.getState();
 	}
 	
 	public CartDetailResponse(CartDetails cartDetails) {
 		this.cartDetailId = cartDetails.getCartDetailId();
-		this.unitPrice = cartDetails.getUnitPrice();
+		this.unitPrice = (float) ((float) Math.round(cartDetails.getUnitPrice() * 100.0)/100.0);
 		this.quantity = cartDetails.getQuantity();
-		this.totalPrice = cartDetails.getTotalPrice();
+		this.totalPrice = (float) ((float) Math.round(cartDetails.getTotalPrice() * 100.0)/100.0);
 		this.product = new ProductResponse(cartDetails.getProduct());
 		this.state = cartDetails.getState();
 	}

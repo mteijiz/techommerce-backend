@@ -1,5 +1,6 @@
 package com.techommerce.backend.response;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,11 +20,13 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ProductResponse {
 
+	private static DecimalFormat df = new DecimalFormat("0.00");
+	
 	private Long productId;
 	private String productCode;
 	private String productName;
 	private String productDescription;
-	private Float productPrice;
+	private double productPrice;
 	private Integer productQuantity;
 	private Float productTotalPoints;
 	private Float productRate;
@@ -39,7 +42,7 @@ public class ProductResponse {
 		this.productCode = product.getProductCode();
 		this.productName = product.getProductName();
 		this.productDescription = product.getProductDescription();
-		this.productPrice = product.getProductPrice();
+		this.productPrice = (float) Math.round(product.getProductPrice() * 100.0)/100.0;
 		this.productQuantity = product.getProductQuantity();
 		this.productTotalPoints = product.getProductTotalPoints();
 		this.productRate = product.getProductRate();

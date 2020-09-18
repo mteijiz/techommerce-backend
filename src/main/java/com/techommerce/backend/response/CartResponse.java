@@ -21,7 +21,7 @@ public class CartResponse {
 	public CartResponse(Cart cart, List<CartDetailResponse> details) {
 		this.userId = cart.getUserId();
 		this.quantityOfProduct = cart.getQuantityOfProduct();
-		this.totalAmount = cart.getTotalAmount();
+		this.totalAmount = (float) ((float) Math.round(cart.getTotalAmount() * 100.0)/100.0);
 		this.state = cart.getState();
 		this.details = details;
 	}

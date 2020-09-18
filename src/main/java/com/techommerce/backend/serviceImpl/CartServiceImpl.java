@@ -51,7 +51,8 @@ public class CartServiceImpl implements CartService {
 				.findFirst();
 		if (cartDetailOptional.isPresent()) {
 			cart.getCartDetails().remove(cartDetailOptional.get());
-			updateCart(cart, detail);
+			substractTotalPriceFromCart(cart, cartDetailOptional.get());
+			updateCartWithExistingProduct(cart, detail, cartDetailOptional.get());
 			updateDetail(cartDetailOptional.get(), detail);
 			cart.getCartDetails().add(cartDetailOptional.get());
 		} else {
@@ -60,6 +61,7 @@ public class CartServiceImpl implements CartService {
 			CartDetails detailSaved = cartDetailsRepository.saveAndFlush(detail);
 			cart.getCartDetails().add(detailSaved);
 		}
+		System.out.println(cart.getTotalAmount());
 		Cart newCart = cartRepository.save(cart);
 		return newCart;
 //		updateUserCart(cartProduct);
@@ -69,16 +71,27 @@ public class CartServiceImpl implements CartService {
 //		return cartProductAdded;
 	}
 
+	private void substractTotalPriceFromCart(Cart cart, CartDetails cartDetails) {
+		cart.setTotalAmount(cart.getTotalAmount() - cartDetails.getTotalPrice());		
+	}
+
 	@Override
 	public void updateCart(Cart cart, CartDetails detail) {
 		cart.setQuantityOfProduct(cart.getQuantityOfProduct() + detail.getQuantity());
-		cart.setTotalAmount(cart.getTotalAmount() + detail.getTotalPrice());
+		cart.setTotalAmount(cart.getTotalAmount() + detail.getQuantity() * detail.getProduct().getProductPrice());
+	}
+	
+	@Override
+	public void updateCartWithExistingProduct(Cart cart, CartDetails detail, CartDetails actualDetail) {
+		cart.setQuantityOfProduct(cart.getQuantityOfProduct() + detail.getQuantity());
+		cart.setTotalAmount(cart.getTotalAmount() + (detail.getQuantity() + actualDetail.getQuantity()) * detail.getProduct().getProductPrice());
 	}
 
 	@Override
 	public void updateDetail(CartDetails cartDetail, CartDetails detail) {
 		cartDetail.setQuantity(cartDetail.getQuantity() + detail.getQuantity());
-		cartDetail.setTotalPrice(cartDetail.getTotalPrice() + detail.getTotalPrice());
+		cartDetail.setUnitPrice(detail.getProduct().getProductPrice());
+		cartDetail.setTotalPrice(cartDetail.getQuantity() * detail.getProduct().getProductPrice());
 	}
 
 //	private void updateUserCart(CartDetails cartProduct) {
@@ -140,12 +153,17 @@ public class CartServiceImpl implements CartService {
 	}
 
 	@Override
-	public void substractQuantityFromCart(Long cartProductId) {
-		CartDetails details = cartDetailsRepository.findById(cartProductId).get();
-		Cart cart = details.getCart();
-		cart.setQuantityOfProduct(cart.getQuantityOfProduct() - details.getQuantity());
-		cart.setTotalAmount(cart.getTotalAmount() - details.getTotalPrice());
+	public void substractQuantityFromCart(CartDetails detail) {
+		Cart cart = detail.getCart();
+		cart.setQuantityOfProduct(cart.getQuantityOfProduct() - detail.getQuantity());
+		cart.setTotalAmount(cart.getTotalAmount() - detail.getTotalPrice());
 		cartRepository.save(cart);
+	}
+
+	@Override
+	public CartDetails getCartDetailById(Long cartProductId) {
+		CartDetails details = cartDetailsRepository.findById(cartProductId).get();
+		return details;
 	}
 
 	@Override
@@ -204,7 +222,8 @@ public class CartServiceImpl implements CartService {
 	public CartDetails updateCartDetail(UpdateQuantityOfProductInACartRequest request) {
 		CartDetails detail = cartDetailsRepository.findById(request.getCartDetail().getCartDetailId()).get();
 		detail.setQuantity(request.getNewQuantity());
-		detail.setTotalPrice(request.getNewQuantity() * detail.getUnitPrice());
+		detail.setUnitPrice(detail.getProduct().getProductPrice());
+		detail.setTotalPrice(request.getNewQuantity() * detail.getProduct().getProductPrice());
 		return detail;
 	}
 
