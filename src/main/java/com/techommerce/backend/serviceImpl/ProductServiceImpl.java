@@ -195,11 +195,16 @@ public class ProductServiceImpl implements ProductService {
 	@Override
 	public List<Product> getActiveProducts() {
 		List<Product> products = productRepository.findAllByStatus().stream()
-				.filter(product -> product.getProductState() && product.getProductBrand().getBrandState()
-						&& product.getProductCategory().getCategoryState()
-						&& product.getProductSubcategory().getSubcategoryState())
+				.filter(product -> checkIfProductIsActiveOrInactive(product))
 				.collect(Collectors.toList());
 		return products;
+	}
+
+	@Override
+	public boolean checkIfProductIsActiveOrInactive(Product product) {
+		return product.getProductState() && product.getProductBrand().getBrandState()
+				&& product.getProductCategory().getCategoryState()
+				&& product.getProductSubcategory().getSubcategoryState();
 	}
 
 //	@Override
@@ -251,5 +256,14 @@ public class ProductServiceImpl implements ProductService {
 	private void checkIfQuantityProductHasQuantityLowerThanZero(Product product, Integer quantityToSubstract) {
 		if(product.getProductQuantity() - quantityToSubstract < 0)
 			throw new ProductQuantityIsLowerThanZeroException("No hay suficiente stock del producto " + product.getProductName());
+	}
+
+	@Override
+	public List<Product> getProductsByFilter(List<Brand> brands, List<Category> categories,
+			List<Subcategory> subcategories) {
+		List<Product> products = productRepository.findProductInBrand(brands, categories, subcategories).stream()
+				.filter(product -> checkIfProductIsActiveOrInactive(product))
+				.collect(Collectors.toList());
+		return products;
 	}
 }

@@ -51,5 +51,9 @@ public interface ProductService {
 	void addOrSubstractQuantityFromProduct(Product product);
 
 	void substractProductQuantity(List<CartDetails> cartDetailsList);
+	
+	boolean checkIfProductIsActiveOrInactive(Product product);
+
+	List<Product> getProductsByFilter(List<Brand> brands, List<Category> categories, List<Subcategory> subcategories);
 
 }

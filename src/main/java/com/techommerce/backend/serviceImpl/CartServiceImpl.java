@@ -183,7 +183,7 @@ public class CartServiceImpl implements CartService {
 	public CartResponse buildCartResponse(Cart cart) {
 		//checkIfCartHasDetails(cart);
 		List<CartDetailResponse> detailsResponse = cart.getCartDetails().stream()
-				.map(detail -> new CartDetailResponse(detail, productService.buildProductResponse(detail.getProduct())))
+				.map(detail -> new CartDetailResponse(detail, productService.buildProductResponse(detail.getProduct()), productService.checkIfProductIsActiveOrInactive(detail.getProduct())))
 				.collect(Collectors.toList());
 		CartResponse cartResponse = new CartResponse(cart, detailsResponse);
 		return cartResponse;

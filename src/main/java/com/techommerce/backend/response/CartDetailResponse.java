@@ -26,13 +26,13 @@ public class CartDetailResponse {
 		this.state = cartDetails.getState();
 	}
 	
-	public CartDetailResponse(CartDetails cartDetails) {
+	public CartDetailResponse(CartDetails cartDetails, ProductResponse productResponse, boolean active) {
 		this.cartDetailId = cartDetails.getCartDetailId();
 		this.unitPrice = (float) ((float) Math.round(cartDetails.getUnitPrice() * 100.0)/100.0);
 		this.quantity = cartDetails.getQuantity();
 		this.totalPrice = (float) ((float) Math.round(cartDetails.getTotalPrice() * 100.0)/100.0);
-		this.product = new ProductResponse(cartDetails.getProduct());
-		this.state = cartDetails.getState();
+		this.product = productResponse;
+		this.state = active;
 	}
 
 }

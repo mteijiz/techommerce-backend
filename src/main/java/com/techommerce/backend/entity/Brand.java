@@ -59,4 +59,19 @@ public class Brand {
 		this.brandState = request.getBrandState();
 	}
 
+	public Brand(Long brandId,
+			@NotNull(message = "La marca tiene que tener un código") @Size(min = 1, max = 10, message = "El código de la marca tiene que estar entre 1 y 10 caracteres") @NotBlank(message = "El código de la marca no puede estar en blanco") String brandCode,
+			@NotNull(message = "La marca tiene que tener un nombre") @Size(min = 1, max = 15, message = "El nombre de la marca tiene que estar entre 1 y 15 caracteres") @NotBlank(message = "El nombre de la marca no puede estar en blanco") String brandName,
+			@Size(max = 500, message = "La descripción de la marca tiene que ser menor de 500 caracteres") String brandDescription,
+			@NotNull(message = "La marca tiene que tener un estado definido") Boolean brandState) {
+		super();
+		this.brandId = brandId;
+		this.brandCode = brandCode;
+		this.brandName = brandName;
+		this.brandDescription = brandDescription;
+		this.brandState = brandState;
+	}
+	
+	
+
 }

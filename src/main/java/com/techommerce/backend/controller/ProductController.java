@@ -17,8 +17,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.techommerce.backend.entity.Brand;
 import com.techommerce.backend.entity.Product;
 import com.techommerce.backend.request.AddProductRequest;
+import com.techommerce.backend.request.FilterRequest;
 import com.techommerce.backend.request.UpdateProductRequest;
 import com.techommerce.backend.response.ProductResponse;
 import com.techommerce.backend.service.ProductService;
@@ -87,5 +89,12 @@ public class ProductController {
 		Product product = productService.searchProductById(productId);
 		ProductResponse productResponse = productService.buildProductResponse(product);
 		return new ResponseEntity<ProductResponse>(productResponse, HttpStatus.OK);
+	}
+	
+	@PostMapping("/filter")
+	public ResponseEntity<?> getProductsByFilter(@RequestBody FilterRequest filter){
+		List<Product> products = productService.getProductsByFilter(filter.getBrands(), filter.getCategories(), filter.getSubcategories());
+		List<ProductResponse> productsResponse = productService.buildProductResponseList(products);
+		return new ResponseEntity<List<ProductResponse>>(productsResponse, HttpStatus.OK);
 	}
 }
