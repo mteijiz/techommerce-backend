@@ -47,11 +47,15 @@ public class PurchaseOrderDetails {
 	@JoinColumn(name = "purchase_order_id", nullable = false)
 	private PurchaseOrder purchaseOrder;
 	
+	@NotNull
+	private Boolean status;
+	
 	public PurchaseOrderDetails(CartDetails product, PurchaseOrder purchaseOrder) {
 		this.unitPrice = product.getUnitPrice();
 		this.totalPrice = product.getTotalPrice();
 		this.quantity = product.getQuantity();
 		this.product = product.getProduct();
 		this.purchaseOrder = purchaseOrder;
+		this.status = false;
 	}
 }

@@ -47,6 +47,9 @@ public class PurchaseOrder {
 	@NotNull
 	private Date purchaseDate;
 	
+	@NotNull
+	private Boolean status;
+	
 	@OneToMany(mappedBy = "purchaseOrder", cascade = CascadeType.PERSIST, fetch=FetchType.LAZY)
 	private List<PurchaseOrderDetails> details = new ArrayList<>();
 	
@@ -55,6 +58,7 @@ public class PurchaseOrder {
 		this.total = cart.getTotalAmount();
 		this.quantity = cart.getQuantityOfProduct();  
 		this.purchaseDate = new Date();
+		this.status = false;
 	}
 
 	public PurchaseOrder(PurchaseOrderRequest orderRequest) {

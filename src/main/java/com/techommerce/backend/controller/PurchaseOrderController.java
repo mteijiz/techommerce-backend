@@ -1,6 +1,7 @@
 package com.techommerce.backend.controller;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.annotation.security.RolesAllowed;
 
@@ -11,7 +12,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -75,10 +78,28 @@ public class PurchaseOrderController {
 	
 	@GetMapping("getOrders")
 	@RolesAllowed("user")
-	public ResponseEntity<?> getAllOrders(){
+	public ResponseEntity<?> getAllOrdersOfAUser(){
 		KeycloakPrincipal<KeycloakSecurityContext> keycloakToken = keycloakService.getJwtToken();
 		List<PurchaseOrder> orders = purchaseOrderService.getAllOrders(keycloakToken.getName());
 		List<PurchaseOrderResponse> ordersResponse = purchaseOrderService.buildPurchaseOrderResponseList(orders);
 		return new ResponseEntity<List<PurchaseOrderResponse>>(ordersResponse, HttpStatus.OK);
+	}
+	
+	@GetMapping("getAllOrders")
+	@RolesAllowed("admin")
+	public ResponseEntity<?> getAllOrders(){
+		List<PurchaseOrder> orders = purchaseOrderService.getAllOrders();
+		List<PurchaseOrderResponse> ordersResponse = purchaseOrderService.buildPurchaseOrderResponseList(orders);
+		return new ResponseEntity<List<PurchaseOrderResponse>>(ordersResponse, HttpStatus.OK);
+	}
+	
+	@GetMapping("changeStatus/{orderId}")
+	@RolesAllowed("admin")
+	public ResponseEntity<?> changeStatusToOrder(@PathVariable Long orderId){
+		PurchaseOrder order = purchaseOrderService.getOrderById(orderId);
+		PurchaseOrder updatedOrder = purchaseOrderService.changeStatusToReady(order);
+		List<PurchaseOrderDetailsResponse> orderDetailsResponse = updatedOrder.getDetails().stream().map(detail -> new PurchaseOrderDetailsResponse(detail, productService.buildProductResponse(detail.getProduct()))).collect(Collectors.toList());
+		PurchaseOrderResponse orderResponse = new PurchaseOrderResponse(updatedOrder, orderDetailsResponse);
+		return new ResponseEntity<PurchaseOrderResponse>(orderResponse, HttpStatus.OK);
 	}
 }

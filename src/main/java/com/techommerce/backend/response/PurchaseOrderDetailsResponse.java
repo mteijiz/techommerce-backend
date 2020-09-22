@@ -14,6 +14,7 @@ public class PurchaseOrderDetailsResponse {
 	private Float totalPrice;
 	private Integer quantity;
 	private ProductResponse product;
+	private Boolean status;
 	
 	public PurchaseOrderDetailsResponse(PurchaseOrderDetails detail) {
 		this.purchaseOrderDetailsId = detail.getPurchaseOrderDetailsId();
@@ -21,6 +22,7 @@ public class PurchaseOrderDetailsResponse {
 		this.totalPrice = (float) ((float) Math.round(detail.getTotalPrice() * 100.0)/100.0);
 		this.product = new ProductResponse(detail.getProduct());
 		this.quantity = detail.getQuantity();
+		this.status = detail.getStatus();
 	}
 
 	public PurchaseOrderDetailsResponse(PurchaseOrderDetails detail, ProductResponse product) {
@@ -29,6 +31,7 @@ public class PurchaseOrderDetailsResponse {
 		this.totalPrice = (float) ((float) Math.round(detail.getTotalPrice() * 100.0)/100.0);
 		this.product = product;
 		this.quantity = detail.getQuantity();
+		this.status = detail.getStatus();
 	}
 
 }

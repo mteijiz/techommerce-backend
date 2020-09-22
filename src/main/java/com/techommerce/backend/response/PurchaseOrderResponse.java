@@ -19,6 +19,7 @@ public class PurchaseOrderResponse {
 	private Float total;
 	private Integer quantity;
 	private String purchaseDate;
+	private Boolean status;
 	private List<PurchaseOrderDetailsResponse> orderDetails = new ArrayList<>();
 	
 	public PurchaseOrderResponse(PurchaseOrder order) {
@@ -38,5 +39,6 @@ public class PurchaseOrderResponse {
 		SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy");
 		this.purchaseDate = format.format(order.getPurchaseDate());
 		this.orderDetails = orderDetailsResponse;
+		this.status = order.getStatus();
 	}
 }

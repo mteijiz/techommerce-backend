@@ -25,4 +25,12 @@ public interface PurchaseOrderService {
 
 	List<PurchaseOrderResponse> buildPurchaseOrderResponseList(List<PurchaseOrder> orders);
 
+	List<PurchaseOrder> getAllOrders();
+
+	PurchaseOrder getOrderById(Long orderId);
+
+	PurchaseOrder changeStatusToReady(PurchaseOrder order);
+
+	
+
 }

@@ -108,6 +108,25 @@ public class PurchaseOrderServiceImpl implements PurchaseOrderService{
 			throw new EmptyOrderListException("No se ha realizado ninguna compra");
 	}
 
+	@Override
+	public List<PurchaseOrder> getAllOrders() {
+		List<PurchaseOrder> orders = purchaseOrderRepository.findAll();
+		return orders;
+	}
+
+	@Override
+	public PurchaseOrder getOrderById(Long orderId) {
+		PurchaseOrder order = purchaseOrderRepository.findById(orderId).get();
+		return order;
+	}
+
+	@Override
+	public PurchaseOrder changeStatusToReady(PurchaseOrder order) {
+		order.getDetails().stream().forEach(detail -> detail.setStatus(true));
+		purchaseOrderRepository.save(order);
+		return order;
+	}
+
 	
 
 }
