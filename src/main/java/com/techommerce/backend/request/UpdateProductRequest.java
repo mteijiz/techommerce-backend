@@ -17,6 +17,7 @@ public class UpdateProductRequest {
 	private String productDescription;
 	private Float productPrice;
 	private Integer productQuantity;
+	private Integer productQuantityToAddOrSubstract;
 	private Float productTotalPoints;
 	private Float productRate;
 	private Integer productQuantityOfVotes;

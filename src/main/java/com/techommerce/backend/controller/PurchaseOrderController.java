@@ -102,4 +102,15 @@ public class PurchaseOrderController {
 		PurchaseOrderResponse orderResponse = new PurchaseOrderResponse(updatedOrder, orderDetailsResponse);
 		return new ResponseEntity<PurchaseOrderResponse>(orderResponse, HttpStatus.OK);
 	}
+	
+	@GetMapping("changeStatus/{orderId}/{detailId}")
+	@RolesAllowed("admin")
+	public ResponseEntity<?> changeStatusToDetailOfAnOrder(@PathVariable Long orderId, @PathVariable Long detailId){
+		System.out.println(orderId + " " + detailId);
+		PurchaseOrder order = purchaseOrderService.getOrderById(orderId);
+		PurchaseOrder updatedOrder = purchaseOrderService.changeStatusToDetail(order, detailId);
+		List<PurchaseOrderDetailsResponse> orderDetailsResponse = updatedOrder.getDetails().stream().map(detail -> new PurchaseOrderDetailsResponse(detail, productService.buildProductResponse(detail.getProduct()))).collect(Collectors.toList());
+		PurchaseOrderResponse orderResponse = new PurchaseOrderResponse(updatedOrder, orderDetailsResponse);
+		return new ResponseEntity<PurchaseOrderResponse>(orderResponse, HttpStatus.OK);
+	}
 }

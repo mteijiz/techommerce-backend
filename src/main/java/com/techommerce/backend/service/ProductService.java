@@ -48,7 +48,7 @@ public interface ProductService {
 	
 	void checkIfProductQuantityIsLowerThanZero(Product product);
 	
-	void addOrSubstractQuantityFromProduct(Product product);
+	void addOrSubstractQuantityFromProduct(Product product, Integer quantityToAddOrSubstract);
 
 	void substractProductQuantity(List<CartDetails> cartDetailsList);
 	

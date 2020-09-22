@@ -70,7 +70,7 @@ public class ProductController {
 	@RolesAllowed("admin")
 	public ResponseEntity<?> updateProduct(@RequestBody UpdateProductRequest productRequest){
 		@Valid Product productToUpdate = new Product(productRequest);
-		productService.addOrSubstractQuantityFromProduct(productToUpdate);
+		productService.addOrSubstractQuantityFromProduct(productToUpdate, productRequest.getProductQuantityToAddOrSubstract());
 		productService.checkIfProductQuantityIsLowerThanZero(productToUpdate);
 		Product productUpdated = productService.updateProduct(productToUpdate);
 		ProductResponse productUpdatedResponse = new ProductResponse(productUpdated);

@@ -23,27 +23,27 @@ import com.techommerce.backend.service.ProductService;
 import com.techommerce.backend.service.PurchaseOrderService;
 
 @Service
-public class PurchaseOrderServiceImpl implements PurchaseOrderService{
+public class PurchaseOrderServiceImpl implements PurchaseOrderService {
 
 	@Autowired
 	private CartDetailsRepository cartDetailsRepository;
-	
+
 	@Autowired
 	private PurchaseOrderRepository purchaseOrderRepository;
-	
+
 	@Autowired
-	private PurchaseOrderDetailsRepository purchaseOrderDetailsRepository; 
-	
+	private PurchaseOrderDetailsRepository purchaseOrderDetailsRepository;
+
 	@Autowired
 	private CartService cartService;
-	
+
 	@Autowired
 	private ProductService productService;
-	
+
 	@Override
 	public List<PurchaseOrderDetails> purchaseProducts(List<PurchaseOrderDetails> orderDetails) {
 		List<PurchaseOrderDetails> productsAdded = new ArrayList<>();
-		for(PurchaseOrderDetails productDetails : orderDetails) {
+		for (PurchaseOrderDetails productDetails : orderDetails) {
 			PurchaseOrderDetails puchaseSaved = purchaseOrderDetailsRepository.save(productDetails);
 			productsAdded.add(puchaseSaved);
 		}
@@ -61,7 +61,7 @@ public class PurchaseOrderServiceImpl implements PurchaseOrderService{
 	public List<PurchaseOrderDetailsResponse> buildPurchaseOrderDetailsResponseList(
 			List<PurchaseOrderDetails> addedPurchaseProducts) {
 		List<PurchaseOrderDetailsResponse> purchaseList = new ArrayList<>();
-		for(PurchaseOrderDetails orderDetail : addedPurchaseProducts) {
+		for (PurchaseOrderDetails orderDetail : addedPurchaseProducts) {
 			PurchaseOrderDetailsResponse orderResponse = new PurchaseOrderDetailsResponse(orderDetail);
 			purchaseList.add(orderResponse);
 		}
@@ -70,7 +70,8 @@ public class PurchaseOrderServiceImpl implements PurchaseOrderService{
 
 	@Override
 	public List<PurchaseOrderDetails> setPurchaseOrderDetails(List<CartDetails> details, PurchaseOrder purchaseOrder) {
-		List<PurchaseOrderDetails> purchaseOrderDetails = details.stream().map(detail -> new PurchaseOrderDetails(detail, purchaseOrder)).collect(Collectors.toList());
+		List<PurchaseOrderDetails> purchaseOrderDetails = details.stream()
+				.map(detail -> new PurchaseOrderDetails(detail, purchaseOrder)).collect(Collectors.toList());
 //		for(CartDetails cartDetails : details) {
 //			PurchaseOrderDetails aux = new PurchaseOrderDetails(cartDetails, purchaseOrder);
 //			purchaseOrderDetails.add(aux);
@@ -93,10 +94,13 @@ public class PurchaseOrderServiceImpl implements PurchaseOrderService{
 	@Override
 	public List<PurchaseOrderResponse> buildPurchaseOrderResponseList(List<PurchaseOrder> orders) {
 		checkIfPurchaseOrderListIsEmpty(orders);
-		
+
 		List<PurchaseOrderResponse> ordersResponse = new ArrayList<>();
-		for(PurchaseOrder order : orders) {
-			List<PurchaseOrderDetailsResponse> orderDetailsResponse = order.getDetails().stream().map(detail -> new PurchaseOrderDetailsResponse(detail, productService.buildProductResponse(detail.getProduct()))).collect(Collectors.toList());
+		for (PurchaseOrder order : orders) {
+			List<PurchaseOrderDetailsResponse> orderDetailsResponse = order.getDetails().stream()
+					.map(detail -> new PurchaseOrderDetailsResponse(detail,
+							productService.buildProductResponse(detail.getProduct())))
+					.collect(Collectors.toList());
 			PurchaseOrderResponse orderResponse = new PurchaseOrderResponse(order, orderDetailsResponse);
 			ordersResponse.add(orderResponse);
 		}
@@ -104,7 +108,7 @@ public class PurchaseOrderServiceImpl implements PurchaseOrderService{
 	}
 
 	private void checkIfPurchaseOrderListIsEmpty(List<PurchaseOrder> orders) {
-		if(orders.isEmpty())
+		if (orders.isEmpty())
 			throw new EmptyOrderListException("No se ha realizado ninguna compra");
 	}
 
@@ -123,10 +127,24 @@ public class PurchaseOrderServiceImpl implements PurchaseOrderService{
 	@Override
 	public PurchaseOrder changeStatusToReady(PurchaseOrder order) {
 		order.getDetails().stream().forEach(detail -> detail.setStatus(true));
+		order.setStatus(true);
 		purchaseOrderRepository.save(order);
 		return order;
 	}
 
-	
+	@Override
+	public PurchaseOrder changeStatusToDetail(PurchaseOrder order, Long detailId) {
+		order.getDetails().stream().forEach(detail -> {
+			if (detailId.equals(detail.getPurchaseOrderDetailsId())) {
+				detail.setStatus(!detail.getStatus());
+			}
+		});
+		if(order.getDetails().stream().filter(detail -> !detail.getStatus()).findAny().isPresent())
+			order.setStatus(false);
+		else
+			order.setStatus(true);
+		purchaseOrderRepository.save(order);
+		return order;
+	}
 
 }

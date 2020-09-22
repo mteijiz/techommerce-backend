@@ -31,6 +31,8 @@ public interface PurchaseOrderService {
 
 	PurchaseOrder changeStatusToReady(PurchaseOrder order);
 
+	PurchaseOrder changeStatusToDetail(PurchaseOrder order, Long detailId);
+
 	
 
 }

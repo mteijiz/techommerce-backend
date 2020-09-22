@@ -111,9 +111,8 @@ public class ProductServiceImpl implements ProductService {
 	}
 
 	@Override
-	public void addOrSubstractQuantityFromProduct(Product product) {
-		Product actualProduct = productRepository.findById(product.getProductId()).get();
-		product.setProductQuantity(product.getProductQuantity() + actualProduct.getProductQuantity());
+	public void addOrSubstractQuantityFromProduct(Product product, Integer quantityToAddOrSubstract) {
+		product.setProductQuantity(product.getProductQuantity() + quantityToAddOrSubstract);
 	}
 
 //	@Override
