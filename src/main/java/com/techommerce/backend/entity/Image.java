@@ -47,7 +47,6 @@ public class Image {
 	private Boolean isMainImage;
 
 	public Image(String originalFilename, String contentType, String path, Product product, Boolean isMainImage) {
-		// TODO Auto-generated constructor stub
 		this.name = originalFilename;
 		this.type = contentType;
 		this.imagePath = path;

@@ -1,17 +1,11 @@
 package com.techommerce.backend.response;
 
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 
 import com.techommerce.backend.entity.Brand;
-import com.techommerce.backend.entity.Category;
-import com.techommerce.backend.entity.Image;
 import com.techommerce.backend.entity.Product;
-import com.techommerce.backend.entity.Subcategory;
-import com.techommerce.backend.service.ImageService;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -19,8 +13,6 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 public class ProductResponse {
-
-	private static DecimalFormat df = new DecimalFormat("0.00");
 	
 	private Long productId;
 	private String productCode;
@@ -28,9 +20,6 @@ public class ProductResponse {
 	private String productDescription;
 	private double productPrice;
 	private Integer productQuantity;
-	private Float productTotalPoints;
-	private Float productRate;
-	private Integer productQuantityOfVotes;
 	private Brand productBrand;
 	private CategoryWithoutSubcategoriesResponse productCategory;
 	private SubcategoryWithoutCategoryResponse productSubcategory;
@@ -44,9 +33,6 @@ public class ProductResponse {
 		this.productDescription = product.getProductDescription();
 		this.productPrice = (float) Math.round(product.getProductPrice() * 100.0)/100.0;
 		this.productQuantity = product.getProductQuantity();
-		this.productTotalPoints = product.getProductTotalPoints();
-		this.productRate = product.getProductRate();
-		this.productQuantityOfVotes = product.getProductQuantityOfVotes();
 		this.productBrand = product.getProductBrand();
 		this.productCategory = new CategoryWithoutSubcategoriesResponse(product.getProductCategory());
 		this.productSubcategory = new SubcategoryWithoutCategoryResponse(product.getProductSubcategory());
@@ -61,9 +47,6 @@ public class ProductResponse {
 		this.productDescription = product.getProductDescription();
 		this.productPrice = product.getProductPrice();
 		this.productQuantity = product.getProductQuantity();
-		this.productTotalPoints = product.getProductTotalPoints();
-		this.productRate = product.getProductRate();
-		this.productQuantityOfVotes = product.getProductQuantityOfVotes();
 		this.productBrand = product.getProductBrand();
 		this.productCategory = new CategoryWithoutSubcategoriesResponse(product.getProductCategory());
 		this.productSubcategory = new SubcategoryWithoutCategoryResponse(product.getProductSubcategory());

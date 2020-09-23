@@ -14,7 +14,6 @@ import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.techommerce.backend.request.AddProductWithQuantityToCartRequest;
-import com.techommerce.backend.request.DeleteCartProductRequest;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -53,16 +52,12 @@ public class CartDetails {
 	@JsonIgnoreProperties("cartDetails")
 	private Cart cart;
 	
-	@NotNull
-	private Boolean state;
-	
 	public CartDetails(Product product, Cart cart) {
 		this.unitPrice = product.getProductPrice();
 		this.quantity = new Integer(1);
 		this.totalPrice = new Float(product.getProductPrice() * 1);
 		this.product = product;
 		this.cart = cart;
-		this.state = true;
 	}
 
 	public CartDetails(@Valid AddProductWithQuantityToCartRequest cartDetails, Cart cart) {
@@ -71,7 +66,6 @@ public class CartDetails {
 		this.totalPrice = new Float(cartDetails.getProduct().getProductPrice() * cartDetails.getQuantity());
 		this.product = cartDetails.getProduct();
 		this.cart = cart;
-		this.state = true;
 	}
 
 	public CartDetails(@Valid AddProductWithQuantityToCartRequest cartDetails) {
@@ -79,7 +73,6 @@ public class CartDetails {
 		this.quantity = new Integer(cartDetails.getQuantity());
 		this.totalPrice = new Float(cartDetails.getProduct().getProductPrice() * cartDetails.getQuantity());
 		this.product = cartDetails.getProduct();
-		this.state = true;
 	}
 
 	

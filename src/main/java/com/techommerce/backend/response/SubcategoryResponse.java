@@ -1,6 +1,5 @@
 package com.techommerce.backend.response;
 
-import com.techommerce.backend.entity.Category;
 import com.techommerce.backend.entity.Subcategory;
 
 import lombok.Data;

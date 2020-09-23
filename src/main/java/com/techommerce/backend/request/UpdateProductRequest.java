@@ -18,9 +18,6 @@ public class UpdateProductRequest {
 	private Float productPrice;
 	private Integer productQuantity;
 	private Integer productQuantityToAddOrSubstract;
-	private Float productTotalPoints;
-	private Float productRate;
-	private Integer productQuantityOfVotes;
 	private Brand productBrand;
 	private Category productCategory;
 	private Subcategory productSubcategory;

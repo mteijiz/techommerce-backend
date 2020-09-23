@@ -1,9 +1,6 @@
 package com.techommerce.backend.controller;
 
-import java.util.List;
-
 import javax.annotation.security.RolesAllowed;
-import javax.persistence.EntityManager;
 import javax.validation.Valid;
 
 import org.keycloak.KeycloakPrincipal;
@@ -23,11 +20,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.techommerce.backend.entity.Cart;
 import com.techommerce.backend.entity.CartDetails;
-import com.techommerce.backend.entity.Product;
 import com.techommerce.backend.request.AddProductWithQuantityToCartRequest;
-import com.techommerce.backend.request.DeleteCartProductRequest;
 import com.techommerce.backend.request.UpdateQuantityOfProductInACartRequest;
-import com.techommerce.backend.response.CartDetailResponse;
 import com.techommerce.backend.response.CartResponse;
 import com.techommerce.backend.service.CartService;
 import com.techommerce.backend.service.KeycloakService;
@@ -53,16 +47,6 @@ public class CartController {
 		CartResponse cartResponse = cartService.buildCartResponse(updatedCart);
 		return new ResponseEntity<CartResponse>(cartResponse, HttpStatus.OK);
 	}
-	
-//	@GetMapping("/getDetails")
-//	@RolesAllowed("user")
-//	public ResponseEntity<?> getCartDetails(){
-//		KeycloakPrincipal<KeycloakSecurityContext> keycloakToken = keycloakService.getJwtToken();
-//		Cart cart = cartService.getCartOfUser(keycloakToken.getName());
-//		List<CartDetails> cartProductsList = cartService.getAllProductsOfACart(cart);
-//		List<CartDetailResponse> cartProductResponseList = cartService.buildCartProductResponseList(cartProductsList);
-//		return new ResponseEntity<List<CartDetailResponse>>(cartProductResponseList, HttpStatus.OK);
-//	}
 	
 	@GetMapping("/get")
 	@RolesAllowed("user")

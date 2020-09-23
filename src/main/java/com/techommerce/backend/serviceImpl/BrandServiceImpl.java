@@ -13,16 +13,12 @@ import com.techommerce.backend.exception.ExistingBrandException;
 import com.techommerce.backend.repository.BrandRepository;
 import com.techommerce.backend.response.BrandResponse;
 import com.techommerce.backend.service.BrandService;
-import com.techommerce.backend.service.ProductService;
 
 @Service
 public class BrandServiceImpl implements BrandService {
 
 	@Autowired
 	private BrandRepository brandRepository;
-	
-	@Autowired
-	private ProductService productService;
 
 	@Override
 	public Brand addBrand(Brand brandToAdd) {
@@ -30,8 +26,6 @@ public class BrandServiceImpl implements BrandService {
 			Brand brandCreated = brandRepository.save(brandToAdd);
 			return brandCreated;
 		} catch (DataIntegrityViolationException e) {
-//			checkIfBrandCodeExists(e, brandToAdd);
-//			checkIfBrandNameExists(e, brandToAdd);
 			throw new ExistingBrandException("Hubo un problema creando la marca", e);
 		} 
 	}
@@ -57,8 +51,6 @@ public class BrandServiceImpl implements BrandService {
 			Brand brandUpdated = brandRepository.save(brandToUpdate);
 			return brandUpdated;
 		} catch (DataIntegrityViolationException e) {
-//			checkIfBrandCodeExists(e, brandToUpdate);
-//			checkIfBrandNameExists(e, brandToUpdate);
 			throw new ExistingBrandException("Hubo un problema actualizando la marca", e);
 		} 
 	}
@@ -79,16 +71,6 @@ public class BrandServiceImpl implements BrandService {
 	public void setBrandCodeAndNameToUppercase(Brand brand) {
 		brand.setBrandCode(brand.getBrandCode().toUpperCase());
 		brand.setBrandName(brand.getBrandName().toUpperCase());
-	}
-	
-	public void checkIfBrandNameExists(DataIntegrityViolationException e, Brand brand) {
-		if(e.getCause().getCause().getMessage().contains("(brand_name)=(" + brand.getBrandName() + ") already exists"))
-			throw new ExistingBrandException("El nombre de la marca (" + brand.getBrandName() + ") ya existe", e);
-	}
-	
-	public void checkIfBrandCodeExists(DataIntegrityViolationException e, Brand brand) {
-		if(e.getCause().getCause().getMessage().contains("(brand_code)=(" + brand.getBrandCode() + ") already exists"))
-			throw new ExistingBrandException("El código de la marca (" + brand.getBrandCode() + ") ya existe", e);
 	}
 
 }

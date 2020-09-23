@@ -13,9 +13,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -23,17 +20,12 @@ import com.techommerce.backend.entity.Cart;
 import com.techommerce.backend.entity.CartDetails;
 import com.techommerce.backend.entity.PurchaseOrder;
 import com.techommerce.backend.entity.PurchaseOrderDetails;
-import com.techommerce.backend.request.CartRequest;
-import com.techommerce.backend.request.PurchaseOrderRequest;
 import com.techommerce.backend.response.PurchaseOrderResponse;
 import com.techommerce.backend.response.PurchaseOrderDetailsResponse;
 import com.techommerce.backend.service.CartService;
 import com.techommerce.backend.service.KeycloakService;
 import com.techommerce.backend.service.ProductService;
 import com.techommerce.backend.service.PurchaseOrderService;
-
-import ch.qos.logback.classic.net.SyslogAppender;
-
 
 @RestController
 @RequestMapping("purchase")
@@ -67,15 +59,6 @@ public class PurchaseOrderController {
 		return new ResponseEntity<List<PurchaseOrderDetailsResponse>>(productResponseList, HttpStatus.OK);
 	}
 	
-	@GetMapping("/getPurchaseDetails")
-	@RolesAllowed("user")
-	public ResponseEntity<?> getOrderDetailsOfAUser(@RequestBody PurchaseOrderRequest orderRequest){
-		PurchaseOrder order = new PurchaseOrder(orderRequest);
-		List<PurchaseOrderDetails> orderDetails = purchaseOrderService.getOrderDetaislOfAUser(order);
-		List<PurchaseOrderDetailsResponse> orderDetailsResponse = purchaseOrderService.buildPurchaseOrderDetailsResponseList(orderDetails);
-		return new ResponseEntity<List<PurchaseOrderDetailsResponse>>(orderDetailsResponse, HttpStatus.OK);
-	}
-	
 	@GetMapping("getOrders")
 	@RolesAllowed("user")
 	public ResponseEntity<?> getAllOrdersOfAUser(){
@@ -95,7 +78,7 @@ public class PurchaseOrderController {
 	
 	@GetMapping("changeStatus/{orderId}")
 	@RolesAllowed("admin")
-	public ResponseEntity<?> changeStatusToOrder(@PathVariable Long orderId){
+	public ResponseEntity<?> changeStatusOfOrder(@PathVariable Long orderId){
 		PurchaseOrder order = purchaseOrderService.getOrderById(orderId);
 		PurchaseOrder updatedOrder = purchaseOrderService.changeStatusToReady(order);
 		List<PurchaseOrderDetailsResponse> orderDetailsResponse = updatedOrder.getDetails().stream().map(detail -> new PurchaseOrderDetailsResponse(detail, productService.buildProductResponse(detail.getProduct()))).collect(Collectors.toList());

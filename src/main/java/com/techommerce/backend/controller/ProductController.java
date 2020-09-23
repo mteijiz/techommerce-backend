@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.techommerce.backend.entity.Brand;
 import com.techommerce.backend.entity.Product;
 import com.techommerce.backend.request.AddProductRequest;
 import com.techommerce.backend.request.FilterRequest;
@@ -57,15 +56,6 @@ public class ProductController {
 		return new ResponseEntity<List<ProductResponse>>(productsResponseList, HttpStatus.OK);
 	}
 	
-//	@PutMapping("/updateState")
-//	@RolesAllowed("admin")
-//	public ResponseEntity<?> updateProductState(@Valid @RequestBody UpdateProductRequest productRequest){
-//		@Valid Product productToUpdate = new Product(productRequest);
-//		Product productUpdated = productService.updateProductState(productToUpdate);
-//		ProductResponse productUpdatedResponse = new ProductResponse(productUpdated);
-//		return new ResponseEntity<ProductResponse>(productUpdatedResponse, HttpStatus.OK);
-//	}
-	
 	@PutMapping("/update")
 	@RolesAllowed("admin")
 	public ResponseEntity<?> updateProduct(@RequestBody UpdateProductRequest productRequest){
@@ -76,13 +66,6 @@ public class ProductController {
 		ProductResponse productUpdatedResponse = new ProductResponse(productUpdated);
 		return new ResponseEntity<ProductResponse>(productUpdatedResponse, HttpStatus.OK);
 	}
-	
-//	@PutMapping("/addVote")
-//	public ResponseEntity<?> addVoteToProduct(@RequestBody @Valid AddVoteToProductRequest voteRequest){
-//		Product product = productService.updateProductRate(voteRequest);
-//		ProductResponse productResponse = new ProductResponse(product);
-//		return new ResponseEntity<ProductResponse>(productResponse, HttpStatus.OK);
-//	}
 	
 	@GetMapping("/getById/{productId}")
 	public ResponseEntity<?> getProductById(@PathVariable Long productId){

@@ -1,7 +1,6 @@
 package com.techommerce.backend.response;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import com.techommerce.backend.entity.Cart;
 
@@ -15,14 +14,12 @@ public class CartResponse {
 	private String userId;
 	private Integer quantityOfProduct;
 	private Float totalAmount;
-	private Boolean state;
 	private List<CartDetailResponse> details;
 	
 	public CartResponse(Cart cart, List<CartDetailResponse> details) {
 		this.userId = cart.getUserId();
 		this.quantityOfProduct = cart.getQuantityOfProduct();
 		this.totalAmount = (float) ((float) Math.round(cart.getTotalAmount() * 100.0)/100.0);
-		this.state = cart.getState();
 		this.details = details;
 	}
 }

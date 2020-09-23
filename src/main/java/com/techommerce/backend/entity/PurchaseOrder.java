@@ -1,6 +1,5 @@
 package com.techommerce.backend.entity;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;

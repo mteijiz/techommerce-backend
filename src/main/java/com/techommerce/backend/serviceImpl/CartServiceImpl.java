@@ -1,6 +1,5 @@
 package com.techommerce.backend.serviceImpl;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -12,16 +11,12 @@ import org.springframework.stereotype.Service;
 
 import com.techommerce.backend.entity.Cart;
 import com.techommerce.backend.entity.CartDetails;
-import com.techommerce.backend.entity.PurchaseOrderDetails;
-import com.techommerce.backend.exception.EmptyCartException;
 import com.techommerce.backend.repository.CartDetailsRepository;
 import com.techommerce.backend.repository.CartRepository;
 import com.techommerce.backend.request.UpdateQuantityOfProductInACartRequest;
 import com.techommerce.backend.response.CartDetailResponse;
 import com.techommerce.backend.response.CartResponse;
-import com.techommerce.backend.response.PurchaseOrderDetailsResponse;
 import com.techommerce.backend.service.CartService;
-import com.techommerce.backend.service.ImageService;
 import com.techommerce.backend.service.ProductService;
 
 @Service
@@ -64,14 +59,10 @@ public class CartServiceImpl implements CartService {
 		System.out.println(cart.getTotalAmount());
 		Cart newCart = cartRepository.save(cart);
 		return newCart;
-//		updateUserCart(cartProduct);
-//		checkAndUpdateProductInCart(cartProduct);
-//		CartDetails cartProductAdded = cartDetailsRepository.save(cartProduct);
-//		cartRepository.save(cartProduct.getCart());
-//		return cartProductAdded;
 	}
 
-	private void substractTotalPriceFromCart(Cart cart, CartDetails cartDetails) {
+	@Override
+	public void substractTotalPriceFromCart(Cart cart, CartDetails cartDetails) {
 		cart.setTotalAmount(cart.getTotalAmount() - cartDetails.getTotalPrice());		
 	}
 
@@ -94,44 +85,10 @@ public class CartServiceImpl implements CartService {
 		cartDetail.setTotalPrice(cartDetail.getQuantity() * detail.getProduct().getProductPrice());
 	}
 
-//	private void updateUserCart(CartDetails cartProduct) {
-//		System.out.println("updateUserCart - actual en cart: " + cartProduct.getCart().getQuantityOfProduct() + " lo que se agrega: " + cartProduct.getQuantity());
-//		System.out.println("updateUserCart - actual en cart: " + cartProduct.getCart().getTotalAmount() + " lo que se agrega: " + cartProduct.getTotalPrice());
-//		cartProduct.getCart().setQuantityOfProduct(cartProduct.getCart().getQuantityOfProduct() + cartProduct.getQuantity());
-//		cartProduct.getCart().setTotalAmount(cartProduct.getCart().getTotalAmount() + cartProduct.getTotalPrice());
-//	}
-
-//	private void checkAndUpdateProductInCart(CartDetails cartProduct) {
-//		CartDetails productDatails = cartDetailsRepository.findByProductAndUser(cartProduct.getProduct().getProductId(), cartProduct.getCart().getUserId());
-//		if(!cartProductList.isEmpty()) {
-//			addProductToTheLine(cartProductList, cartProduct);
-//			deleteCartProduct(cartProductList.get(0).getCartProductId());
-//		}
-//	}
-
-//	private void addProductToTheLine(List<CartDetails> cartProductList, CartDetails cartProduct) {
-//		cartProduct.setQuantity(cartProduct.getQuantity() + cartProductList.get(0).getQuantity());
-//		cartProduct.setTotalPrice(cartProduct.getTotalPrice() + cartProductList.get(0).getTotalPrice());
-//	}
-
 	@Override
 	public List<CartDetails> getAllProductsOfACart(Cart cart) {
-		List<CartDetails> cartProductsList = cartDetailsRepository.findByCartAndState(cart);
+		List<CartDetails> cartProductsList = cartDetailsRepository.findByCart(cart);
 		return cartProductsList;
-	}
-
-	@Override
-	public List<CartDetailResponse> buildCartProductResponseList(List<CartDetails> cartProductsList) {
-//		List<CartDetailResponse> cartProductResponseList = new ArrayList<CartDetailResponse>();
-//		for (CartDetails cartProduct : cartProductsList) {
-//			CartDetailResponse cartProductResponse = new CartDetailResponse(cartProduct,
-//					productService.buildProductResponse(cartProduct.getProduct()));
-//			cartProductResponseList.add(cartProductResponse);
-//		}
-		List<CartDetailResponse> cartProductResponseList = cartProductsList.stream()
-				.map(detail -> new CartDetailResponse(detail, productService.buildProductResponse(detail.getProduct())))
-				.collect(Collectors.toList());
-		return cartProductResponseList;
 	}
 
 	@Override
@@ -141,9 +98,6 @@ public class CartServiceImpl implements CartService {
 			return existingCart;
 		}
 		Cart newCart = cartRepository.findById(id).get();
-//		Cart newCart = cartRepository.findById(id).orElse(createNewCartForUser(id));
-//		if(!newCart.getCartDetails().isEmpty())
-//			System.out.println("\nLa lista de details tiene algo\n");
 		return newCart;
 	}
 
@@ -170,10 +124,6 @@ public class CartServiceImpl implements CartService {
 	public void deleteProductsOfAUser(Cart cart) {
 		List<CartDetails> cartDetails = getAllProductsOfACart(cart);
 		cartDetails.stream().forEach(detail -> cartDetailsRepository.delete(detail));
-//		for(CartDetails product : cartDetails) {
-//			cartDetailsRepository.delete(product);
-//		}
-		// cartDetailsRepository.deleteWithUserId(cart.getUserId());
 		cart.setTotalAmount(new Float(0));
 		cart.setQuantityOfProduct(new Integer(0));
 		cartRepository.save(cart);
@@ -181,17 +131,11 @@ public class CartServiceImpl implements CartService {
 
 	@Override
 	public CartResponse buildCartResponse(Cart cart) {
-		//checkIfCartHasDetails(cart);
 		List<CartDetailResponse> detailsResponse = cart.getCartDetails().stream()
 				.map(detail -> new CartDetailResponse(detail, productService.buildProductResponse(detail.getProduct()), productService.checkIfProductIsActiveOrInactive(detail.getProduct())))
 				.collect(Collectors.toList());
 		CartResponse cartResponse = new CartResponse(cart, detailsResponse);
 		return cartResponse;
-	}
-
-	public void checkIfCartHasDetails(Cart cart) {
-		if (cart.getCartDetails().isEmpty())
-			throw new EmptyCartException("No se ha agregado ningún producto al carrito");
 	}
 
 	@Override
@@ -201,11 +145,6 @@ public class CartServiceImpl implements CartService {
 
 	@Override
 	public void updateCartTotals(Cart cart, CartDetails detail) {
-//		for(CartDetails detailOfCart : cart.getCartDetails()) {
-//			if(detail.getCartDetailId().equals(detailOfCart.getCartDetailId())) {
-//				cart.getCartDetails().removeIf(filter)
-//			}
-//		}
 		cart.getCartDetails().removeIf(detailOfCart -> detailOfCart.getCartDetailId().equals(detail.getCartDetailId()));
 		cart.getCartDetails().add(detail);
 		float total = 0;

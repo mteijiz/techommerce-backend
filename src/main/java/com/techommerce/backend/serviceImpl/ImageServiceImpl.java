@@ -11,7 +11,6 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.techommerce.backend.entity.Image;
@@ -21,7 +20,6 @@ import com.techommerce.backend.exception.ExistsMainImageOfAProductException;
 import com.techommerce.backend.exception.TooManyImagesForAProductException;
 import com.techommerce.backend.repository.ImageRepository;
 import com.techommerce.backend.response.ImageResponse;
-import com.techommerce.backend.response.ProductResponse;
 import com.techommerce.backend.service.ImageService;
 
 @Service
@@ -75,12 +73,6 @@ public class ImageServiceImpl implements ImageService{
 	}
 
 	@Override
-	public List<Image> getImagesOfProduct(Product product) {
-		List<Image> images = imageRepository.findByProductAndIsNotMain(product);
-		return images;
-	}
-
-	@Override
 	public List<ImageResponse> convertImageList(List<Image> imagesOfProduct) {
 		List<ImageResponse> imageResponses = new ArrayList<>();
 		imagesOfProduct.stream().forEach(image -> {
@@ -124,17 +116,6 @@ public class ImageServiceImpl implements ImageService{
 	}
 
 	@Override
-	public void convertImageListToResponse(ProductResponse auxProductResponse, Product product) {
-		if(product.getProductImages().isEmpty()) {
-			ImageResponse missingImage = getMissingImage();
-			auxProductResponse.getProductImage().add(missingImage);
-		}
-		else {
-			auxProductResponse.setProductImage(convertImageList(product.getProductImages()));
-		}
-	}
-
-	@Override
 	public void uploadMainImages(MultipartFile[] images, Product product) {
 		for(MultipartFile image : images) {
 			createFolderOfProduct(product);
@@ -157,28 +138,6 @@ public class ImageServiceImpl implements ImageService{
 		List<Image> imageList = imageRepository.findByProduct(product);
 		if(images.length + imageList.size() > 4 )
 			throw new TooManyImagesForAProductException("Un producto puede tener solo 4 imagenes y tiene " + imageList.size());
-	}
-
-//	public void saveMainImageInDatabaseAndFolder(Product product, MultipartFile image) {
-//		saveImageIntoFolder(image, product);
-//		String filePath = Paths.get(imageDirectory, image.getOriginalFilename()).toString();
-//		File imageFile = new File(filePath);
-//		Image productImageToUpload = new Image(image.getOriginalFilename(), image.getContentType(), imageFile.getPath(), product, true);
-//		imageRepository.save(productImageToUpload);
-//	}
-	
-	@Override
-	public void checkIfImageListIsEmptyAndGetMissingImagen(List<ImageResponse> imageResponseList) {
-		if(imageResponseList.isEmpty()) {
-			ImageResponse missingImage = getMissingImage();
-			imageResponseList.add(missingImage);
-		}
-	}
-
-	@Override
-	public List<Image> getMainImagesOfProduct(Product product) {
-		List<Image> images = imageRepository.findByProductAndIsMain(product);
-		return images;
 	}
 
 	@Override

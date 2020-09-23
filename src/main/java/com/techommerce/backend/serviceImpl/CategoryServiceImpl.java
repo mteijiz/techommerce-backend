@@ -10,8 +10,6 @@ import org.springframework.stereotype.Service;
 import com.techommerce.backend.entity.Category;
 import com.techommerce.backend.exception.AddingCategoryException;
 import com.techommerce.backend.exception.EmptyCategoryListException;
-import com.techommerce.backend.exception.ExistingCategoryCodeException;
-import com.techommerce.backend.exception.ExistingCategoryNameException;
 import com.techommerce.backend.exception.NotExistingCategoryException;
 import com.techommerce.backend.exception.UpdatingCategoryException;
 import com.techommerce.backend.repository.CategoryRepository;
@@ -30,8 +28,6 @@ public class CategoryServiceImpl implements CategoryService {
 			Category categoryAdded = categoryRepository.save(categoryToAdd);
 			return categoryAdded;
 		} catch (DataIntegrityViolationException e) {
-//			checkIfCategoryCodeExists(categoryToAdd, e);
-//			checkIfCategoryNameExists(categoryToAdd, e);
 			throw new AddingCategoryException("Hubo un problema creando la categoría", e);
 		}
 	}
@@ -56,8 +52,6 @@ public class CategoryServiceImpl implements CategoryService {
 			Category categoryUpdated = categoryRepository.save(categoryToUpdate);
 			return categoryUpdated;
 		} catch (DataIntegrityViolationException e) {
-//			checkIfCategoryCodeExists(categoryToUpdate, e);
-//			checkIfCategoryNameExists(categoryToUpdate, e);
 			throw new UpdatingCategoryException("Hubo un problema actualizando la categoría", e);
 		}
 	}
@@ -72,20 +66,6 @@ public class CategoryServiceImpl implements CategoryService {
 	public List<Category> getActiveBrands() {
 		List<Category> categoryList = categoryRepository.findActiveBrands();
 		return categoryList;
-	}
-	
-	public void checkIfCategoryCodeExists(Category category, DataIntegrityViolationException e) {
-		if (e.getCause().getCause().getMessage()
-				.contains("(category_code)=(" + category.getCategoryCode() + ") already exists"))
-			throw new ExistingCategoryCodeException(
-					"The category code " + category.getCategoryCode() + " already exists", e);
-	}
-
-	public void checkIfCategoryNameExists(Category category, DataIntegrityViolationException e) {
-		if (e.getCause().getCause().getMessage()
-				.contains("(category_name)=(" + category.getCategoryName() + ") already exists"))
-			throw new ExistingCategoryNameException(
-					"The category name " + category.getCategoryName() + " already exists", e);
 	}
 
 	@Override

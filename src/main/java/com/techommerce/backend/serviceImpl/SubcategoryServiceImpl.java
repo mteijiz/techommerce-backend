@@ -11,8 +11,6 @@ import com.techommerce.backend.entity.Category;
 import com.techommerce.backend.entity.Subcategory;
 import com.techommerce.backend.exception.AddingSubcategoryException;
 import com.techommerce.backend.exception.EmptySubcategoryListException;
-import com.techommerce.backend.exception.ExistingCategoryCodeException;
-import com.techommerce.backend.exception.ExistingCategoryNameException;
 import com.techommerce.backend.exception.UpdatingSubcategoryException;
 import com.techommerce.backend.repository.SubcategoryRepository;
 import com.techommerce.backend.response.SubcategoryResponse;
@@ -30,8 +28,6 @@ public class SubcategoryServiceImpl implements SubcategoryService {
 			Subcategory subcategoryAdded = subcategoryRepository.save(subcategoryToAdd);
 			return subcategoryAdded;
 		} catch (DataIntegrityViolationException e) {
-//			checkIfSubcategoryCodeExists(subcategoryToAdd, e);
-//			checkIfSubcategoryNameExists(subcategoryToAdd, e);
 			throw new AddingSubcategoryException("Hubo un problema creadno la subcategoría", e);
 		}
 	}
@@ -57,8 +53,6 @@ public class SubcategoryServiceImpl implements SubcategoryService {
 			Subcategory subcategoryUpdated = subcategoryRepository.save(subcategoryToUpdate);
 			return subcategoryUpdated;
 		} catch (DataIntegrityViolationException e) {
-//			checkIfSubcategoryCodeExists(subcategoryToUpdate, e);
-//			checkIfSubcategoryNameExists(subcategoryToUpdate, e);
 			throw new UpdatingSubcategoryException("Hubo un problema actualizando la subcategoría", e);
 		}
 	}
@@ -68,20 +62,6 @@ public class SubcategoryServiceImpl implements SubcategoryService {
 		List<Subcategory> subcategories = subcategoryRepository.findActiveSubcategories().stream()
 				.filter(subcategory -> subcategory.getCategory().getCategoryState()).collect(Collectors.toList());
 		return subcategories;
-	}
-	
-	public void checkIfSubcategoryNameExists(Subcategory subcategory, DataIntegrityViolationException e) {
-		if (e.getCause().getCause().getMessage()
-				.contains("(subcategory_name)=(" + subcategory.getSubcategoryName() + ") already exists"))
-			throw new ExistingCategoryNameException(
-					"The subcategory name " + subcategory.getSubcategoryName() + " already exists", e);
-	}
-
-	public void checkIfSubcategoryCodeExists(Subcategory subcategory, DataIntegrityViolationException e) {
-		if (e.getCause().getCause().getMessage()
-				.contains("(subcategory_code)=(" + subcategory.getSubcategoryCode() + ") already exists"))
-			throw new ExistingCategoryCodeException(
-					"The subcategory code " + subcategory.getSubcategoryCode() + " already exists", e);
 	}
 
 	@Override

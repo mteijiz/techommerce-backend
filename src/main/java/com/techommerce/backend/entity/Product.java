@@ -13,7 +13,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.validation.Valid;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -61,18 +60,6 @@ public class Product {
 	@Min(0)
 	private Integer productQuantity;
 
-	@Column(nullable = false)
-	@Min(0)
-	private Float productRate;
-	
-	@Column(nullable = false)
-	@Min(0)
-	private Float productTotalPoints;
-
-	@Column(nullable = false)
-	@Min(0)
-	private Integer productQuantityOfVotes;
-
 	@NotNull(message="El producto debe tener un estado")
 	private Boolean productState;
 
@@ -95,9 +82,6 @@ public class Product {
 		this.productCode = productRequest.getProductCode();
 		this.productName = productRequest.getProductName();
 		this.productDescription = productRequest.getProductDescription();
-		this.productQuantityOfVotes = new Integer(0);
-		this.productTotalPoints = new Float(0);
-		this.productRate = new Float(0);
 		this.productPrice = productRequest.getProductPrice();
 		this.productQuantity = productRequest.getProductQuantity();
 		this.productBrand = productRequest.getProductBrand();
@@ -111,9 +95,6 @@ public class Product {
 		this.productCode = productRequest.getProductCode();
 		this.productName = productRequest.getProductName();
 		this.productDescription = productRequest.getProductDescription();
-		this.productQuantityOfVotes = productRequest.getProductQuantityOfVotes();
-		this.productTotalPoints = productRequest.getProductTotalPoints();
-		this.productRate = productRequest.getProductRate();
 		this.productPrice = productRequest.getProductPrice();
 		this.productQuantity = productRequest.getProductQuantity();
 		this.productBrand = productRequest.getProductBrand();

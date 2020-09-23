@@ -1,8 +1,5 @@
 package com.techommerce.backend.response;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
 import com.techommerce.backend.entity.Category;
 
 import lombok.Data;

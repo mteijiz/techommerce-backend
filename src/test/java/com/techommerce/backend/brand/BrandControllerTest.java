@@ -34,7 +34,7 @@ class BrandControllerTest {
 		aBrandRequest.setBrandDescription("test description");
 		aBrandRequest.setBrandState(true);
 		Brand aBrand = new Brand();
-		when(brandService.addBrand(aBrand)).thenReturn(aBrand);
+		//when(brandService.addBrand(aBrand)).thenReturn(aBrand);
 		//mvc.perform(post("/"))
 	}
 

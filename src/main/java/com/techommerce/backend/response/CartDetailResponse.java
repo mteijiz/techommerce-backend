@@ -1,6 +1,5 @@
 package com.techommerce.backend.response;
 
-import com.techommerce.backend.entity.Cart;
 import com.techommerce.backend.entity.CartDetails;
 
 import lombok.Data;
@@ -23,7 +22,6 @@ public class CartDetailResponse {
 		this.quantity = cartDetails.getQuantity();
 		this.totalPrice = (float) ((float) Math.round(cartDetails.getTotalPrice() * 100.0)/100.0);
 		this.product = productResponse;
-		this.state = cartDetails.getState();
 	}
 	
 	public CartDetailResponse(CartDetails cartDetails, ProductResponse productResponse, boolean active) {

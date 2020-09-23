@@ -5,7 +5,6 @@ import java.util.List;
 import com.techommerce.backend.entity.Cart;
 import com.techommerce.backend.entity.CartDetails;
 import com.techommerce.backend.request.UpdateQuantityOfProductInACartRequest;
-import com.techommerce.backend.response.CartDetailResponse;
 import com.techommerce.backend.response.CartResponse;
 
 public interface CartService {
@@ -19,8 +18,6 @@ public interface CartService {
 	Cart getCartOfUser(String id);
 
 	void deleteCartProduct(Long cartProductId);
-	
-	List<CartDetailResponse> buildCartProductResponseList(List<CartDetails> cartProductsList);
 
 	void deleteProductsOfAUser(Cart cart);
 
@@ -40,8 +37,8 @@ public interface CartService {
 	
 	void updateCartTotals(Cart cart, CartDetails detail);
 	
-	void checkIfCartHasDetails(Cart cart);
-	
 	CartDetails getCartDetailById(Long cartProductId);
+	
+	void substractTotalPriceFromCart(Cart cart, CartDetails cartDetails);
 	
 }

@@ -18,9 +18,6 @@ public class ProductWithImagesResponse {
 	private String productDescription;
 	private Float productPrice;
 	private Integer productQuantity;
-	private Float productTotalPoints;
-	private Float productRate;
-	private Integer productQuantityOfVotes;
 	private Brand productBrand;
 	private CategoryWithoutSubcategoriesResponse productCategory;
 	private SubcategoryWithoutCategoryResponse productSubcategory;

@@ -19,8 +19,6 @@ public interface PurchaseOrderService {
 
 	List<PurchaseOrderDetails> setPurchaseOrderDetails(List<CartDetails> cartDetailsList, PurchaseOrder purchaseOrder);
 
-	List<PurchaseOrderDetails> getOrderDetaislOfAUser(PurchaseOrder order);
-
 	List<PurchaseOrder> getAllOrders(String name);
 
 	List<PurchaseOrderResponse> buildPurchaseOrderResponseList(List<PurchaseOrder> orders);
@@ -33,6 +31,6 @@ public interface PurchaseOrderService {
 
 	PurchaseOrder changeStatusToDetail(PurchaseOrder order, Long detailId);
 
-	
+	void checkIfPurchaseOrderListIsEmpty(List<PurchaseOrder> orders);
 
 }

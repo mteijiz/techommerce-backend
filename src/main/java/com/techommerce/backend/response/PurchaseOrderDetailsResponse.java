@@ -1,7 +1,5 @@
 package com.techommerce.backend.response;
 
-import com.techommerce.backend.entity.Product;
-import com.techommerce.backend.entity.PurchaseOrder;
 import com.techommerce.backend.entity.PurchaseOrderDetails;
 
 import lombok.Data;

@@ -13,12 +13,6 @@ import com.techommerce.backend.entity.Subcategory;
 
 public interface ProductRepository extends JpaRepository<Product, Long>{
 
-	List<Product> findByProductCategory(Category category);
-
-	List<Product> findByProductSubcategory(Subcategory subcategory);
-
-	List<Product> findByProductBrand(Brand brand);
-
 	@Query(value = "select p from Product p where p.productState = true")
 	List<Product> findAllByStatus();
 
