@@ -22,6 +22,7 @@ import com.techommerce.backend.entity.Cart;
 import com.techommerce.backend.entity.CartDetails;
 import com.techommerce.backend.request.AddProductWithQuantityToCartRequest;
 import com.techommerce.backend.request.UpdateQuantityOfProductInACartRequest;
+import com.techommerce.backend.response.CartQuantityResponse;
 import com.techommerce.backend.response.CartResponse;
 import com.techommerce.backend.service.CartService;
 import com.techommerce.backend.service.KeycloakService;
@@ -55,6 +56,15 @@ public class CartController {
 		Cart cart = cartService.getCartOfUser(keycloakToken.getName());;
 		CartResponse cartResponse = cartService.buildCartResponse(cart);
 		return new ResponseEntity<CartResponse>(cartResponse, HttpStatus.OK);
+	}
+	
+	@GetMapping("/getQuantity")
+	@RolesAllowed("user")
+	public ResponseEntity<?> getQuantityOfUserCart(){
+		KeycloakPrincipal<KeycloakSecurityContext> keycloakToken = keycloakService.getJwtToken();
+		Cart cart = cartService.getCartOfUser(keycloakToken.getName());;
+		CartQuantityResponse cartResponse = new CartQuantityResponse(cart);
+		return new ResponseEntity<CartQuantityResponse>(cartResponse, HttpStatus.OK);
 	}
 	
 	@DeleteMapping("/deleteFromCart/{cartProductId}")

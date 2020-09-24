@@ -15,7 +15,7 @@ public interface PurchaseOrderService {
 
 	List<PurchaseOrderDetailsResponse> buildPurchaseOrderDetailsResponseList(List<PurchaseOrderDetails> orderDetails);
 
-	PurchaseOrder createOrder(Cart cart);
+	PurchaseOrder createOrder(Cart cart, String string);
 
 	List<PurchaseOrderDetails> setPurchaseOrderDetails(List<CartDetails> cartDetailsList, PurchaseOrder purchaseOrder);
 

@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -51,7 +52,7 @@ public class ProductServiceImpl implements ProductService {
 
 	@Override
 	public List<Product> getAllProducts() {
-		List<Product> productList = productRepository.findAll();
+		List<Product> productList = productRepository.findAll(Sort.by("productName"));
 		return productList;
 	}
 
@@ -95,7 +96,7 @@ public class ProductServiceImpl implements ProductService {
 
 	@Override
 	public List<Product> getActiveProducts() {
-		List<Product> products = productRepository.findAllByStatus().stream()
+		List<Product> products = productRepository.findAllByStatus(Sort.by("productName")).stream()
 				.filter(product -> checkIfProductIsActiveOrInactive(product))
 				.collect(Collectors.toList());
 		return products;

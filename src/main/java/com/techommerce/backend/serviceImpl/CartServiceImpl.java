@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import com.techommerce.backend.entity.Cart;
 import com.techommerce.backend.entity.CartDetails;
+import com.techommerce.backend.exception.EmptyCartException;
 import com.techommerce.backend.repository.CartDetailsRepository;
 import com.techommerce.backend.repository.CartRepository;
 import com.techommerce.backend.request.UpdateQuantityOfProductInACartRequest;
@@ -131,11 +132,18 @@ public class CartServiceImpl implements CartService {
 
 	@Override
 	public CartResponse buildCartResponse(Cart cart) {
+		checkIfCartIsEmpty(cart);
 		List<CartDetailResponse> detailsResponse = cart.getCartDetails().stream()
 				.map(detail -> new CartDetailResponse(detail, productService.buildProductResponse(detail.getProduct()), productService.checkIfProductIsActiveOrInactive(detail.getProduct())))
 				.collect(Collectors.toList());
 		CartResponse cartResponse = new CartResponse(cart, detailsResponse);
 		return cartResponse;
+	}
+
+	@Override
+	public void checkIfCartIsEmpty(Cart cart) {
+		if(cart.getCartDetails().isEmpty())
+			throw new EmptyCartException("No se agregaron productos al carrito");
 	}
 
 	@Override

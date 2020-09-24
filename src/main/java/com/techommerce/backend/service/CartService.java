@@ -41,4 +41,6 @@ public interface CartService {
 	
 	void substractTotalPriceFromCart(Cart cart, CartDetails cartDetails);
 	
+	public void checkIfCartIsEmpty(Cart cart);
+	
 }

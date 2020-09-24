@@ -5,6 +5,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.techommerce.backend.entity.Brand;
@@ -32,7 +33,7 @@ public class BrandServiceImpl implements BrandService {
 
 	@Override
 	public List<Brand> getAllBrands() {
-		List<Brand> brandsList = brandRepository.findAll();
+		List<Brand> brandsList = brandRepository.findAll(Sort.by("brandName"));
 		return brandsList;
 	}
 
@@ -57,7 +58,7 @@ public class BrandServiceImpl implements BrandService {
 
 	@Override
 	public List<Brand> getActiveBrands() {
-		List<Brand> brandsList = brandRepository.findActiveBrands();
+		List<Brand> brandsList = brandRepository.findActiveBrands(Sort.by("brandName"));
 		return brandsList;
 	}
 	

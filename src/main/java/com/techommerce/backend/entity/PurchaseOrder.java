@@ -5,7 +5,6 @@ import java.util.Date;
 import java.util.List;
 
 import javax.persistence.CascadeType;
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -32,7 +31,6 @@ public class PurchaseOrder {
 	private Long purchaseOrderId;
 	
 	@NotNull
-	@Column(nullable=false)
 	private String userId;
 	
 	@NotNull
@@ -49,21 +47,20 @@ public class PurchaseOrder {
 	@NotNull
 	private Boolean status;
 	
+	@NotNull
+	private String userName;
+	
 	@OneToMany(mappedBy = "purchaseOrder", cascade = CascadeType.PERSIST, fetch=FetchType.LAZY)
 	private List<PurchaseOrderDetails> details = new ArrayList<>();
 	
-	public PurchaseOrder(Cart cart) {
+	public PurchaseOrder(Cart cart, String userName) {
 		this.userId = cart.getUserId();
 		this.total = cart.getTotalAmount();
 		this.quantity = cart.getQuantityOfProduct();  
 		this.purchaseDate = new Date();
 		this.status = false;
+		this.userName = userName;
 	}
 
-	public PurchaseOrder(PurchaseOrderRequest orderRequest) {
-		this.purchaseOrderId = orderRequest.getPurchaseOrder();
-		this.userId = orderRequest.getUserId();
-		this.total = orderRequest.getTotal();
-	}
 	
 }

@@ -14,6 +14,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.Sort;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.util.Assert;
 
@@ -270,7 +271,7 @@ class CategoryServiceTest {
 		List<Category> categories = new ArrayList<>();
 		categories.add(aCategory);
 		categories.add(anotherCategory);
-		when(categoryRepository.findActiveBrands()).thenReturn(categories);
+		when(categoryRepository.findActiveBrands(Sort.by("categoryName"))).thenReturn(categories);
 		List<Category> categoriesList = categoryService.getActiveBrands();
 		categoriesList.stream().forEach(category -> assertTrue(category.getCategoryState()));
 	}

@@ -48,10 +48,11 @@ public class PurchaseOrderController {
 	@RolesAllowed("user")
 	public ResponseEntity<?> addPurchaseOfAUser() {
 		KeycloakPrincipal<KeycloakSecurityContext> keycloakToken = keycloakService.getJwtToken();
+		System.out.println(keycloakToken.getKeycloakSecurityContext().getToken().getName());
 		Cart cart = cartService.getCartOfUser(keycloakToken.getName());
 		List<CartDetails> cartDetailsList = cartService.getAllProductsOfACart(cart);
 		productService.substractProductQuantity(cartDetailsList);
-		PurchaseOrder purchaseOrder = purchaseOrderService.createOrder(cart);
+		PurchaseOrder purchaseOrder = purchaseOrderService.createOrder(cart, keycloakToken.getKeycloakSecurityContext().getToken().getName());
 		cartService.deleteProductsOfAUser(cart);
 		List<PurchaseOrderDetails> orderDetails = purchaseOrderService.setPurchaseOrderDetails(cartDetailsList, purchaseOrder);
 		List<PurchaseOrderDetails> addedPurchaseProducts = purchaseOrderService.purchaseProducts(orderDetails);

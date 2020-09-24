@@ -69,13 +69,4 @@ public class Category {
 		this.categoryState = request.getCategoryState();
 	}
 
-	public Category(SearchByCategoryRequest request) {
-		this.categoryId = request.getCategoryId();
-		this.categoryCode = request.getCategoryCode();
-		this.categoryName = request.getCategoryName();
-		this.categoryDescription = request.getCategoryDescription();
-		this.categoryState = request.getCategoryState();
-	}
-
-
 }

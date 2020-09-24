@@ -16,14 +16,6 @@ public class CartDetailResponse {
 	private ProductResponse product;
 	private Boolean state;
 	
-	public CartDetailResponse(CartDetails cartDetails, ProductResponse productResponse) {
-		this.cartDetailId = cartDetails.getCartDetailId();
-		this.unitPrice = (float) ((float) Math.round(cartDetails.getUnitPrice() * 100.0)/100.0);
-		this.quantity = cartDetails.getQuantity();
-		this.totalPrice = (float) ((float) Math.round(cartDetails.getTotalPrice() * 100.0)/100.0);
-		this.product = productResponse;
-	}
-	
 	public CartDetailResponse(CartDetails cartDetails, ProductResponse productResponse, boolean active) {
 		this.cartDetailId = cartDetails.getCartDetailId();
 		this.unitPrice = (float) ((float) Math.round(cartDetails.getUnitPrice() * 100.0)/100.0);

@@ -51,22 +51,6 @@ public class CartDetails {
 	@JoinColumn(name = "user_id", nullable = false)
 	@JsonIgnoreProperties("cartDetails")
 	private Cart cart;
-	
-	public CartDetails(Product product, Cart cart) {
-		this.unitPrice = product.getProductPrice();
-		this.quantity = new Integer(1);
-		this.totalPrice = new Float(product.getProductPrice() * 1);
-		this.product = product;
-		this.cart = cart;
-	}
-
-	public CartDetails(@Valid AddProductWithQuantityToCartRequest cartDetails, Cart cart) {
-		this.unitPrice = cartDetails.getProduct().getProductPrice();
-		this.quantity = new Integer(cartDetails.getQuantity());
-		this.totalPrice = new Float(cartDetails.getProduct().getProductPrice() * cartDetails.getQuantity());
-		this.product = cartDetails.getProduct();
-		this.cart = cart;
-	}
 
 	public CartDetails(@Valid AddProductWithQuantityToCartRequest cartDetails) {
 		this.unitPrice = cartDetails.getProduct().getProductPrice();

@@ -5,6 +5,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.techommerce.backend.entity.Category;
@@ -34,7 +35,7 @@ public class CategoryServiceImpl implements CategoryService {
 
 	@Override
 	public List<Category> getAllCategories() {
-		List<Category> categoryList = categoryRepository.findAll();
+		List<Category> categoryList = categoryRepository.findAll(Sort.by("categoryName"));
 		return categoryList;
 	}
 
@@ -64,7 +65,7 @@ public class CategoryServiceImpl implements CategoryService {
 
 	@Override
 	public List<Category> getActiveBrands() {
-		List<Category> categoryList = categoryRepository.findActiveBrands();
+		List<Category> categoryList = categoryRepository.findActiveBrands(Sort.by("categoryName"));
 		return categoryList;
 	}
 

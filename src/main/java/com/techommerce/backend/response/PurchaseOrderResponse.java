@@ -18,16 +18,8 @@ public class PurchaseOrderResponse {
 	private Integer quantity;
 	private String purchaseDate;
 	private Boolean status;
+	private String userName;
 	private List<PurchaseOrderDetailsResponse> orderDetails = new ArrayList<>();
-	
-	public PurchaseOrderResponse(PurchaseOrder order) {
-		this.purchaseOrderId = order.getPurchaseOrderId();
-		this.userId = order.getUserId();
-		this.total = (float) ((float) Math.round(order.getTotal() * 100.0)/100.0);
-		this.quantity = order.getQuantity();
-		SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy");
-		this.purchaseDate = format.format(order.getPurchaseDate());
-	}
 	
 	public PurchaseOrderResponse(PurchaseOrder order, List<PurchaseOrderDetailsResponse> orderDetailsResponse) {
 		this.purchaseOrderId = order.getPurchaseOrderId();
@@ -38,5 +30,6 @@ public class PurchaseOrderResponse {
 		this.purchaseDate = format.format(order.getPurchaseDate());
 		this.orderDetails = orderDetailsResponse;
 		this.status = order.getStatus();
+		this.userName = order.getUserName();
 	}
 }

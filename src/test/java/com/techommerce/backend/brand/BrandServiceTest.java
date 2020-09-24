@@ -12,6 +12,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.Sort;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.util.Assert;
 
@@ -233,7 +234,7 @@ public class BrandServiceTest {
 		List<Brand> brands = new ArrayList<>();
 		brands.add(aBrand);
 		brands.add(anotherBrand);
-		when(brandRepository.findActiveBrands()).thenReturn(brands);
+		when(brandRepository.findActiveBrands(Sort.by("brandName"))).thenReturn(brands);
 		List<Brand> brandsReturn = brandService.getActiveBrands();
 		assertFalse(brandsReturn.isEmpty());
 		brandsReturn.stream().forEach(brand -> assertTrue(brand.getBrandState()));

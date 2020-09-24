@@ -5,6 +5,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.techommerce.backend.entity.Category;
@@ -34,7 +35,7 @@ public class SubcategoryServiceImpl implements SubcategoryService {
 
 	@Override
 	public List<Subcategory> getAllSubcategories() {
-		List<Subcategory> subcategoriesList = subcategoryRepository.findAll();
+		List<Subcategory> subcategoriesList = subcategoryRepository.findAll(Sort.by("subcategoryName"));
 		return subcategoriesList;
 	}
 
@@ -59,7 +60,7 @@ public class SubcategoryServiceImpl implements SubcategoryService {
 
 	@Override
 	public List<Subcategory> getActiveSubcategories() {
-		List<Subcategory> subcategories = subcategoryRepository.findActiveSubcategories().stream()
+		List<Subcategory> subcategories = subcategoryRepository.findActiveSubcategories(Sort.by("subcategoryName")).stream()
 				.filter(subcategory -> subcategory.getCategory().getCategoryState()).collect(Collectors.toList());
 		return subcategories;
 	}
@@ -78,7 +79,7 @@ public class SubcategoryServiceImpl implements SubcategoryService {
 
 	@Override
 	public List<Subcategory> getSubcategoryByCategory(Category category) {
-		List<Subcategory> subcategoryListOfCategory = subcategoryRepository.findByCategory(category);
+		List<Subcategory> subcategoryListOfCategory = subcategoryRepository.findByCategory(category, Sort.by("subcategoryName"));
 		return subcategoryListOfCategory;
 	}
 

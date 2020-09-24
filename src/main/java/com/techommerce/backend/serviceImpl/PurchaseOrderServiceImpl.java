@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.techommerce.backend.entity.Cart;
@@ -42,8 +43,8 @@ public class PurchaseOrderServiceImpl implements PurchaseOrderService {
 	}
 
 	@Override
-	public PurchaseOrder createOrder(Cart cart) {
-		PurchaseOrder order = new PurchaseOrder(cart);
+	public PurchaseOrder createOrder(Cart cart, String userName) {
+		PurchaseOrder order = new PurchaseOrder(cart, userName);
 		PurchaseOrder orderSaved = purchaseOrderRepository.save(order);
 		return orderSaved;
 	}
@@ -68,7 +69,7 @@ public class PurchaseOrderServiceImpl implements PurchaseOrderService {
 
 	@Override
 	public List<PurchaseOrder> getAllOrders(String name) {
-		List<PurchaseOrder> orders = purchaseOrderRepository.findAllByUserId(name);
+		List<PurchaseOrder> orders = purchaseOrderRepository.findAllByUserId(name, Sort.by("purchaseDate"));
 		return orders;
 	}
 
@@ -96,7 +97,7 @@ public class PurchaseOrderServiceImpl implements PurchaseOrderService {
 
 	@Override
 	public List<PurchaseOrder> getAllOrders() {
-		List<PurchaseOrder> orders = purchaseOrderRepository.findAll();
+		List<PurchaseOrder> orders = purchaseOrderRepository.findAll(Sort.by("purchaseDate"));
 		return orders;
 	}
 
