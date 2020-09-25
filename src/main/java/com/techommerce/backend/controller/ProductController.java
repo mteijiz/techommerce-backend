@@ -76,7 +76,7 @@ public class ProductController {
 	
 	@PostMapping("/filter")
 	public ResponseEntity<?> getProductsByFilter(@RequestBody FilterRequest filter){
-		List<Product> products = productService.getProductsByFilter(filter.getBrands(), filter.getCategories(), filter.getSubcategories());
+		List<Product> products = productService.getProductsByFilter(filter.getBrands(), filter.getCategories(), filter.getSubcategories(), filter.getMinPrice(), filter.getMaxPrice());
 		List<ProductResponse> productsResponse = productService.buildProductResponseList(products);
 		return new ResponseEntity<List<ProductResponse>>(productsResponse, HttpStatus.OK);
 	}

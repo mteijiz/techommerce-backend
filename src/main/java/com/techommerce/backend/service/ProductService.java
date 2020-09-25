@@ -35,7 +35,7 @@ public interface ProductService {
 	
 	boolean checkIfProductIsActiveOrInactive(Product product);
 
-	List<Product> getProductsByFilter(List<Brand> brands, List<Category> categories, List<Subcategory> subcategories);
+	List<Product> getProductsByFilter(List<Brand> brands, List<Category> categories, List<Subcategory> subcategories, Float float1, Float float2);
 	
 	void checkIfProductListIsEmpty(List<Product> productsList);
 	

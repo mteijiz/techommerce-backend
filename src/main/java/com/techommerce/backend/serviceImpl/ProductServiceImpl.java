@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,6 +24,11 @@ import com.techommerce.backend.response.ImageResponse;
 import com.techommerce.backend.response.ProductResponse;
 import com.techommerce.backend.service.ImageService;
 import com.techommerce.backend.service.ProductService;
+
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 
 @Service
 public class ProductServiceImpl implements ProductService {
@@ -153,10 +159,16 @@ public class ProductServiceImpl implements ProductService {
 
 	@Override
 	public List<Product> getProductsByFilter(List<Brand> brands, List<Category> categories,
-			List<Subcategory> subcategories) {
-		List<Product> products = productRepository.findProductInBrand(brands, categories, subcategories).stream()
-				.filter(product -> checkIfProductIsActiveOrInactive(product))
-				.collect(Collectors.toList());
+			List<Subcategory> subcategories, Float minPrice, Float maxPrice) {
+		System.out.println(minPrice);
+		System.out.println(maxPrice);
+		if(brands.isEmpty())
+			brands = null;
+		if(categories.isEmpty())
+			categories = null;
+		if(subcategories.isEmpty())
+			subcategories = null;
+		List<Product> products = productRepository.findProductWithFilter(brands, categories, subcategories, minPrice, maxPrice);
 		return products;
 	}
 }

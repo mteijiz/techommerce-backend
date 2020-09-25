@@ -15,6 +15,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.Sort;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.util.Assert;
 
@@ -319,7 +320,7 @@ public class SubcategoryServiceTest {
 		List<Subcategory> subcategories = new ArrayList<>();
 		subcategories.add(aSubcategory);
 		subcategories.add(anotherSubcategory);
-		when(subcategoryRepository.findActiveSubcategories()).thenReturn(subcategories);
+		when(subcategoryRepository.findActiveSubcategories(Sort.by("subcategoryName"))).thenReturn(subcategories);
 		List<Subcategory> subcategoriesList = subcategoryService.getActiveSubcategories();
 		assertFalse(subcategoriesList.isEmpty());
 		assertTrue(subcategoriesList.size() > 0);
@@ -381,7 +382,7 @@ public class SubcategoryServiceTest {
 		aSubcategory.setCategory(aCategory);
 		List<Subcategory> subcategories = new ArrayList<>();
 		subcategories.add(aSubcategory);
-		when(subcategoryRepository.findByCategory(aCategory)).thenReturn(subcategories);
+		when(subcategoryRepository.findByCategory(aCategory, Sort.by("subcategoryName"))).thenReturn(subcategories);
 		assertNotNull(subcategories);
 		assertFalse(subcategories.isEmpty());
 		assertTrue(subcategories.size()>0);

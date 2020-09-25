@@ -14,9 +14,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class FilterRequest {
 
-	private List<Brand> brands = new ArrayList<>();
-	private List<Category> categories = new ArrayList<>();
-	private List<Subcategory> subcategories = new ArrayList<>();
+	private List<Brand> brands;
+	private List<Category> categories;
+	private List<Subcategory> subcategories;
 	private Float minPrice;
 	private Float maxPrice;
 	
