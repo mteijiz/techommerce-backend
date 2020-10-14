@@ -68,7 +68,7 @@ public class ImageController {
 	public ResponseEntity<?> changeMainImage(@RequestBody NewMainImageRequest request){
 		Image newMainImage = imageService.searchImageById(request.getImageId());
 		List<Image> images = imageService.searchImagesOfAProduct(request.getProduct());
-		imageService.ifThereIsMainImageChangesItToSecondaryImage(images);
+		imageService.checkIfThereIsMainImageChangesItToSecondaryImage(images);
 		imageService.setNewMainImage(newMainImage, images);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}

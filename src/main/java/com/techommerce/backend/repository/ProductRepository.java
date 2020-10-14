@@ -20,8 +20,8 @@ public interface ProductRepository extends JpaRepository<Product, Long>, JpaSpec
 	@Query(value = "select p from Product p where p.productState = true")
 	List<Product> findAllByStatus(Sort sort);
 
-	@Query(value = "select p from Product p where (p.productBrand in :brands or :brands is null) and p.productCategory in :categories and p.productSubcategory in :subcategories and (p.productPrice > :minPrice or :minPrice is null) and (p.productPrice < :maxPrice or :maxPrice is null) and p.productState = true")
-	List<Product> findProductWithFilter(@Param("brands") List<Brand> brands, @Param("categories") List<Category> categories, @Param("subcategories") List<Subcategory> subcategories, @Param("minPrice") float minPrice, @Param("maxPrice") float maxPrice);
+	@Query(value = "select p from Product p where (p.productBrand in :brands or :brands is null) and (p.productCategory in :categories or :categories is null) and (p.productSubcategory in :subcategories or :subcategories is null) and (p.productPrice >= :minPrice or :minPrice is null) and (p.productPrice <= :maxPrice or :maxPrice is null) and p.productState = true")
+	List<Product> findProductWithFilter(@Param("brands") List<Brand> brands, @Param("categories") List<Category> categories, @Param("subcategories") List<Subcategory> subcategories, @Param("minPrice") Float minPrice, @Param("maxPrice") Float maxPrice);
 
 
 }

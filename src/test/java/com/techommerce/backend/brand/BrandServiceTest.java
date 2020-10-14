@@ -85,7 +85,7 @@ public class BrandServiceTest {
 			assertEquals("Hubo un problema creando la marca", e.getMessage());
 		}
 	}
-	
+
 	@Test
 	public void testGetAllTheBrandsWithBrandsInsideAList() {
 		Brand aBrand = new Brand();
@@ -109,7 +109,7 @@ public class BrandServiceTest {
 		assertEquals(2, brandsReturn.size());
 		verify(brandRepository, times(1)).findAll();
 	}
-	
+
 	@Test
 	public void testGetAllBrandListIsEmpty() {
 		List<Brand> brands = new ArrayList<>();
@@ -119,7 +119,7 @@ public class BrandServiceTest {
 		assertEquals(0, brandsReturn.size());
 		verify(brandRepository, times(1)).findAll();
 	}
-	
+
 	@Test
 	public void testBuildBrandResponseListSuccessfully() {
 		Brand aBrand = new Brand();
@@ -144,12 +144,11 @@ public class BrandServiceTest {
 		List<Brand> brands = new ArrayList<>();
 		try {
 			List<BrandResponse> brandsResponse = brandService.buildBrandsResponseList(brands);
-		}
-		catch(EmptyBrandListException e) {
+		} catch (EmptyBrandListException e) {
 			assertEquals("No hay marcas cargadas", e.getMessage());
 		}
 	}
-	
+
 	@Test
 	public void testUpdateBrandSuccessfully() {
 		Brand brandToUpdate = new Brand();
@@ -198,7 +197,7 @@ public class BrandServiceTest {
 			assertEquals("Hubo un problema actualizando la marca", e.getMessage());
 		}
 	}
-	
+
 //	@Test
 //	public void testChangeBrandStateToActive() {
 //		Brand aBrand = new Brand();
@@ -216,7 +215,7 @@ public class BrandServiceTest {
 //		Brand brand = brandService.changeStatusOfBrand(aBrand);
 //		assertFalse(brand.getBrandState());
 //	}
-	
+
 	@Test
 	public void testGetActiveBrandsSuccessfully() {
 		Brand aBrand = new Brand();
@@ -239,7 +238,7 @@ public class BrandServiceTest {
 		assertFalse(brandsReturn.isEmpty());
 		brandsReturn.stream().forEach(brand -> assertTrue(brand.getBrandState()));
 	}
-	
+
 //	@Test
 //	public void testGetOppositeBrandStateFromActiveToInactive() {
 //		Brand aBrand = new Brand();
@@ -255,7 +254,7 @@ public class BrandServiceTest {
 //		Boolean brandState = brandService.getOppositeStateOfABrand(aBrand);
 //		assertFalse(brandState);
 //	}
-	
+
 	@Test
 	public void testBrandNameAndCodeToUpperCase() {
 		Brand aBrand = new Brand();
@@ -265,7 +264,7 @@ public class BrandServiceTest {
 		assertEquals("code".toUpperCase(), aBrand.getBrandCode());
 		assertEquals("name".toUpperCase(), aBrand.getBrandName());
 	}
-	
+
 	@Test
 	public void testCheckIfAListWithBrandsIsEmptyAndBrandListIsNotEmpty() {
 		Brand aBrand = new Brand();
@@ -286,12 +285,13 @@ public class BrandServiceTest {
 		brandService.checkIsBrandListEmpty(brands);
 		assertFalse(brands.isEmpty());
 	}
-	
+
 	@Test
 	public void testCheckIfAListWithBrandsIsEmptyAndBrandListIsEmpty() {
 		List<Brand> brands = new ArrayList<>();
-		try{brandService.checkIsBrandListEmpty(brands);}
-		catch(EmptyBrandListException e) {
+		try {
+			brandService.checkIsBrandListEmpty(brands);
+		} catch (EmptyBrandListException e) {
 			assertEquals("No hay marcas cargadas", e.getMessage());
 		}
 	}

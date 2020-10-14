@@ -26,7 +26,7 @@ public interface ImageService {
 	
 	void saveImageIntoFolder(MultipartFile image, Product product);
 
-	void saveImageInDatabaseAndFolder(Product product, MultipartFile image, Boolean isMainImage);
+	Image saveImageInDatabase(Product product, MultipartFile image, Boolean isMainImage);
 	
 	void checkIfMoreThanFourImagesForTheProductAreUploaded(MultipartFile[] images, Product product);
 	
@@ -38,6 +38,6 @@ public interface ImageService {
 
 	void setNewMainImage(Image image, List<Image> images);
 
-	void ifThereIsMainImageChangesItToSecondaryImage(List<Image> images);
+	void checkIfThereIsMainImageChangesItToSecondaryImage(List<Image> images);
 	
 }

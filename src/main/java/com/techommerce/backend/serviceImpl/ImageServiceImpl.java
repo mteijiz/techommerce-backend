@@ -7,7 +7,10 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -28,7 +31,7 @@ public class ImageServiceImpl implements ImageService{
 	@Autowired
 	private ImageRepository imageRepository;
 	
-	public static String imageDirectory = System.getProperty("user.dir") + "\\Image product";;
+	public static String imageDirectory = System.getProperty("user.dir") + "\\Image product";
 	
 	private static String missingImageDirectory = System.getProperty("user.dir")
 			+ "\\Missing product image\\missing_product.png";
@@ -38,16 +41,17 @@ public class ImageServiceImpl implements ImageService{
 		for(MultipartFile image : images) {
 			createFolderOfProduct(product);
 			saveImageIntoFolder(image, product);
-			saveImageInDatabaseAndFolder(product, image, false);
+			saveImageInDatabase(product, image, false);
 		}
 	}
 
 	@Override
-	public void saveImageInDatabaseAndFolder(Product product, MultipartFile image, Boolean isMainImage) {
+	public Image saveImageInDatabase(Product product, MultipartFile image, Boolean isMainImage) {
 		String filePath = Paths.get(imageDirectory, product.getProductCode(), image.getOriginalFilename()).toString();
 		File imageFile = new File(filePath);
 		Image productImageToUpload = new Image(image.getOriginalFilename(), image.getContentType(), imageFile.getPath(), product, isMainImage);
-		imageRepository.save(productImageToUpload);
+		Image imageAdded = imageRepository.save(productImageToUpload);
+		return imageAdded;
 	}
 
 	@Override
@@ -74,11 +78,7 @@ public class ImageServiceImpl implements ImageService{
 
 	@Override
 	public List<ImageResponse> convertImageList(List<Image> imagesOfProduct) {
-		List<ImageResponse> imageResponses = new ArrayList<>();
-		imagesOfProduct.stream().forEach(image -> {
-			ImageResponse ir = new ImageResponse(image);
-			imageResponses.add(ir);
-		});
+		List<ImageResponse> imageResponses = imagesOfProduct.stream().map(image -> new ImageResponse(image)).collect(Collectors.toList());
 		return imageResponses;
 	}
 
@@ -93,7 +93,7 @@ public class ImageServiceImpl implements ImageService{
 			missingProductBytes = Files.readAllBytes(filePath);
 			missingProductImage = new ImageResponse(name, contentType, missingProductBytes);
 		} catch (IOException e) {
-			e.printStackTrace();
+			throw new ErrorSavingImageIntoAFolder("Hubo un problema guardando la imagen dentro en la carpeta");
 		}
 		return missingProductImage;
 	}
@@ -120,7 +120,7 @@ public class ImageServiceImpl implements ImageService{
 		for(MultipartFile image : images) {
 			createFolderOfProduct(product);
 			saveImageIntoFolder(image, product);
-			saveImageInDatabaseAndFolder(product, image, true);
+			saveImageInDatabase(product, image, true);
 		}
 	}
 	
@@ -157,7 +157,7 @@ public class ImageServiceImpl implements ImageService{
 	}
 
 	@Override
-	public void ifThereIsMainImageChangesItToSecondaryImage(List<Image> images) {
+	public void checkIfThereIsMainImageChangesItToSecondaryImage(List<Image> images) {
 		images.stream().forEach(image -> {
 			if(image.getIsMainImage())
 				image.setIsMainImage(false);
