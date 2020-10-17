@@ -34,7 +34,7 @@ public class ImageServiceImpl implements ImageService{
 	public static String imageDirectory = System.getProperty("user.dir") + "\\Image product";
 	
 	private static String missingImageDirectory = System.getProperty("user.dir")
-			+ "\\Missing product image\\missing_product.png";
+			+ "/Missing product image/missing_product.png";
 	
 	@Override
 	public void uploadImages(MultipartFile[] images, Product product) {
@@ -93,7 +93,7 @@ public class ImageServiceImpl implements ImageService{
 			missingProductBytes = Files.readAllBytes(filePath);
 			missingProductImage = new ImageResponse(name, contentType, missingProductBytes);
 		} catch (IOException e) {
-			throw new ErrorSavingImageIntoAFolder("Hubo un problema recuperando la imagen dentro en la carpeta " + e.getMessage());
+			throw new ErrorSavingImageIntoAFolder("Hubo un problema recuperando la imagen dentro en la carpeta " + e.getCause() + " " + e.getMessage());
 		}
 		return missingProductImage;
 	}
