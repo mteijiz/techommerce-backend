@@ -93,7 +93,7 @@ public class ImageServiceImpl implements ImageService{
 			missingProductBytes = Files.readAllBytes(filePath);
 			missingProductImage = new ImageResponse(name, contentType, missingProductBytes);
 		} catch (IOException e) {
-			throw new ErrorSavingImageIntoAFolder("Hubo un problema guardando la imagen dentro en la carpeta");
+			throw new ErrorSavingImageIntoAFolder("Hubo un problema recuperando la imagen dentro en la carpeta " + e.getMessage());
 		}
 		return missingProductImage;
 	}
